@@ -2880,8 +2880,8 @@ body::before {
   width: 100%;
   height: 0.38rem;
   overflow: visible;
-  -webkit-appearance: none;
   appearance: none;
+  -webkit-appearance: none;
   border: 1px solid rgba(47, 227, 255, 0.28);
   border-radius: 999rem;
   background: rgba(47, 227, 255, 0.06);
@@ -2957,6 +2957,7 @@ h1 {
 .final-cta p,
 .footer-brand p {
   text-align: justify;
+  text-wrap: pretty;
 }
 
 .hero-console {
@@ -3057,5 +3058,443 @@ h1 {
   .final-cta p,
   .footer-brand p {
     text-align: left;
+  }
+}
+
+/*
+  Mobile experience lock.
+  Desktop composition is preserved. Below 980px the layout stops using the desktop sidebar geometry
+  and switches to a phone-first shell: fixed top bar, optional drawer, bottom quick navigation,
+  single-column content, and no horizontal overflow.
+*/
+.mobile-topbar,
+.mobile-bottom-nav {
+  display: none;
+}
+
+@media (max-width: 980px) {
+  :root {
+    --sidebar-width: 0rem;
+    --container: 100%;
+  }
+
+  html,
+  body {
+    width: 100%;
+    max-width: 100%;
+    overflow-x: hidden;
+  }
+
+  body {
+    font-size: 15px;
+    line-height: 1.62;
+  }
+
+  body::after {
+    right: -16rem;
+    bottom: -18rem;
+    width: 28rem;
+    height: 28rem;
+  }
+
+  .mobile-topbar {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 72;
+    display: grid;
+    grid-template-columns: 2.75rem minmax(0, 1fr) 2.75rem;
+    align-items: center;
+    gap: 0.65rem;
+    min-height: 4.1rem;
+    padding: 0.62rem max(0.9rem, env(safe-area-inset-left)) 0.62rem max(0.9rem, env(safe-area-inset-right));
+    border-bottom: 1px solid rgba(159, 220, 255, 0.13);
+    background: rgba(7, 10, 15, 0.82);
+    -webkit-backdrop-filter: blur(1.25rem);
+    backdrop-filter: blur(1.25rem);
+  }
+
+  .mobile-menu-button,
+  .mobile-topbar-wa {
+    position: static;
+    display: grid;
+    width: 2.75rem;
+    height: 2.75rem;
+    place-items: center;
+    border: 1px solid rgba(159, 220, 255, 0.16);
+    border-radius: 0.95rem;
+    color: var(--text);
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.05);
+    box-shadow: none;
+    -webkit-backdrop-filter: none;
+    backdrop-filter: none;
+  }
+
+  .mobile-topbar-brand {
+    display: grid;
+    min-width: 0;
+    gap: 0.05rem;
+    text-align: left;
+  }
+
+  .mobile-topbar-brand span {
+    overflow: hidden;
+    color: var(--text);
+    font-size: 0.93rem;
+    font-weight: 850;
+    letter-spacing: -0.018em;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+
+  .mobile-topbar-brand small {
+    color: var(--muted-2);
+    font-size: 0.68rem;
+    font-weight: 750;
+  }
+
+  .app-main {
+    width: 100%;
+    max-width: 100%;
+    margin-left: 0 !important;
+    margin-right: 0;
+    padding: 5rem clamp(0.9rem, 4vw, 1.15rem) 6.8rem !important;
+  }
+
+  .section,
+  .status-section,
+  .site-footer {
+    width: 100%;
+    max-width: 100% !important;
+    margin-right: 0;
+    margin-left: 0;
+  }
+
+  .section {
+    padding-top: clamp(2.2rem, 10vw, 3.2rem);
+    padding-bottom: clamp(2.2rem, 10vw, 3.2rem);
+    scroll-margin-top: 5rem;
+  }
+
+  .hero-section {
+    min-height: auto;
+    padding-top: 1.2rem;
+  }
+
+  .phi-grid,
+  .phi-heading,
+  .hero-grid,
+  .search-layout,
+  .location-grid,
+  .footer-grid {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 1rem;
+  }
+
+  .phi-heading {
+    align-items: start;
+    margin-bottom: 1rem;
+  }
+
+  h1,
+  h2,
+  h3 {
+    letter-spacing: -0.028em;
+  }
+
+  h1 {
+    max-width: 11.5ch;
+    font-size: clamp(2.25rem, 12.4vw, 3.35rem);
+    line-height: 0.96;
+  }
+
+  h2 {
+    max-width: 13ch;
+    font-size: clamp(1.75rem, 8.2vw, 2.35rem);
+    line-height: 1.02;
+  }
+
+  .hero-title-line {
+    display: inline;
+    white-space: normal;
+  }
+
+  .hero-copy,
+  .hero-lead,
+  .hero-note,
+  .section-heading > p {
+    max-width: 100%;
+  }
+
+  .hero-lead,
+  .hero-note,
+  .section-heading > p,
+  .service-note p,
+  .area-panel p,
+  .location-card p,
+  .final-cta p,
+  .footer-brand p {
+    text-align: left;
+  }
+
+  .hero-actions {
+    grid-template-columns: 1fr;
+    width: 100%;
+    gap: 0.65rem;
+  }
+
+  .btn {
+    width: 100%;
+    min-height: 3.05rem;
+    padding: 0.8rem 1rem;
+    font-size: 0.9rem;
+  }
+
+  .hero-console {
+    width: 100%;
+    max-width: 100%;
+    justify-self: stretch;
+    padding: 1rem;
+  }
+
+  .hero-stat,
+  .charge-card,
+  .status-card,
+  .service-card,
+  .step-card,
+  .battery-card,
+  .order-summary,
+  .area-panel,
+  .location-card,
+  .final-cta {
+    border-radius: 1.1rem;
+  }
+
+  .status-grid,
+  .services-grid,
+  .steps-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr)) !important;
+    gap: 0.75rem;
+  }
+
+  .status-card,
+  .service-card,
+  .step-card {
+    min-width: 0;
+    padding: 0.85rem;
+  }
+
+  .status-card h3,
+  .service-card h3,
+  .step-card h3 {
+    font-size: 0.92rem;
+    line-height: 1.18;
+  }
+
+  .status-card p,
+  .service-card p,
+  .step-card p,
+  .battery-fit,
+  .battery-note {
+    font-size: 0.78rem;
+    line-height: 1.48;
+  }
+
+  .search-toolbar {
+    padding: 0.85rem;
+  }
+
+  .search-input-wrap input {
+    min-width: 0;
+    font-size: 0.88rem;
+  }
+
+  .filter-list {
+    gap: 0.45rem;
+    overflow-x: auto;
+    flex-wrap: nowrap;
+    padding-bottom: 0.25rem;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .filter-chip {
+    flex: 0 0 auto;
+    padding: 0.52rem 0.72rem;
+    font-size: 0.76rem;
+  }
+
+  .catalog-meta {
+    align-items: flex-start;
+    flex-direction: column;
+    gap: 0.3rem;
+    margin: 0.85rem 0;
+  }
+
+  .battery-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+    gap: 0.85rem;
+  }
+
+  .battery-card {
+    min-height: 0;
+    padding: 1rem;
+  }
+
+  .battery-card h3 {
+    font-size: 1.22rem;
+    line-height: 1.08;
+  }
+
+  .battery-card-head {
+    align-items: flex-start;
+    gap: 0.7rem;
+  }
+
+  .battery-card-head > span {
+    max-width: 8.5rem;
+    text-align: right;
+    white-space: normal;
+  }
+
+  .battery-select {
+    min-height: 2.75rem;
+  }
+
+  .order-summary {
+    width: 100%;
+    max-height: none;
+    padding: 1rem;
+  }
+
+  .order-form input,
+  .order-form select {
+    min-height: 2.75rem;
+    font-size: 0.86rem;
+  }
+
+  .map-shell,
+  .leaflet-map,
+  .map-loading {
+    min-height: 17.5rem;
+  }
+
+  .footer-grid {
+    gap: 1.4rem;
+  }
+
+  .footer-links {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 0.65rem;
+  }
+
+  .site-sidebar {
+    top: 0;
+    bottom: 0;
+    left: 0;
+    z-index: 82;
+    width: min(82vw, 20rem);
+    max-width: 20rem;
+    border-radius: 0 1.25rem 1.25rem 0;
+    transform: translateX(-105%);
+    transition: transform 220ms ease;
+  }
+
+  .site-sidebar.is-open {
+    transform: translateX(0);
+  }
+
+  .sidebar-inner {
+    min-height: 100dvh;
+    padding: 1rem;
+    gap: 0.9rem;
+  }
+
+  .sidebar-close {
+    display: grid;
+    width: 2.5rem;
+    height: 2.5rem;
+    place-items: center;
+    border: 1px solid var(--border);
+    border-radius: 0.9rem;
+    cursor: pointer;
+    background: rgba(255, 255, 255, 0.06);
+  }
+
+  .sidebar-backdrop {
+    position: fixed;
+    inset: 0;
+    z-index: 78;
+    pointer-events: none;
+    background: rgba(0, 0, 0, 0);
+    transition: background 220ms ease;
+  }
+
+  .sidebar-backdrop.is-visible {
+    pointer-events: auto;
+    background: rgba(0, 0, 0, 0.48);
+  }
+
+  .mobile-bottom-nav {
+    position: fixed;
+    right: max(0.8rem, env(safe-area-inset-right));
+    bottom: max(0.78rem, env(safe-area-inset-bottom));
+    left: max(0.8rem, env(safe-area-inset-left));
+    z-index: 70;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: 0.2rem;
+    padding: 0.34rem;
+    border: 1px solid rgba(159, 220, 255, 0.15);
+    border-radius: 1.25rem;
+    background: rgba(10, 15, 22, 0.88);
+    box-shadow: 0 1rem 2rem rgba(0, 0, 0, 0.32);
+    -webkit-backdrop-filter: blur(1.2rem);
+    backdrop-filter: blur(1.2rem);
+  }
+
+  .mobile-bottom-nav a {
+    display: grid;
+    min-width: 0;
+    place-items: center;
+    gap: 0.18rem;
+    padding: 0.48rem 0.2rem;
+    border-radius: 0.92rem;
+    color: var(--muted);
+    font-size: 0.68rem;
+    font-weight: 800;
+    line-height: 1.05;
+  }
+
+  .mobile-bottom-nav a.is-active {
+    color: var(--cyan);
+    background: rgba(47, 227, 255, 0.12);
+  }
+}
+
+@media (max-width: 420px) {
+  h1 {
+    max-width: 10.2ch;
+    font-size: clamp(2rem, 11.6vw, 2.95rem);
+  }
+
+  h2 {
+    max-width: 12ch;
+  }
+
+  .status-grid,
+  .services-grid,
+  .steps-grid {
+    grid-template-columns: minmax(0, 1fr) !important;
+  }
+
+  .hero-console {
+    padding: 0.9rem;
+  }
+
+  .footer-links {
+    grid-template-columns: minmax(0, 1fr);
   }
 }

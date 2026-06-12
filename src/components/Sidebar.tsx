@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { BatteryCharging, Clock3, Menu, MapPin, X } from "lucide-react";
+import { BatteryCharging, Clock3, Menu, MapPin, MessageCircle, Search, Wrench, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   BUSINESS_NAME,
@@ -12,6 +12,13 @@ import {
   WHATSAPP_URL,
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+
+const mobileNavItems = [
+  { id: "cari-aki", label: "Cari", icon: Search },
+  { id: "layanan", label: "Layanan", icon: Wrench },
+  { id: "lokasi", label: "Lokasi", icon: MapPin },
+  { id: "faq", label: "FAQ", icon: MessageCircle },
+] as const;
 
 export default function Sidebar() {
   const [isOpen, setIsOpen] = useState(false);
@@ -66,29 +73,27 @@ export default function Sidebar() {
 
   return (
     <>
-      {isOpen ? (
-        <button
-          className="mobile-menu-button"
-          type="button"
-          aria-label="Tutup navigasi"
-          aria-controls="site-sidebar"
-          aria-expanded="true"
-          onClick={() => setIsOpen(false)}
-        >
-          <Menu aria-hidden="true" size={22} />
-        </button>
-      ) : (
+      <header className="mobile-topbar" aria-label="Navigasi mobile">
         <button
           className="mobile-menu-button"
           type="button"
           aria-label="Buka navigasi"
           aria-controls="site-sidebar"
-          aria-expanded="false"
+          aria-expanded={isOpen ? "true" : "false"}
           onClick={() => setIsOpen(true)}
         >
-          <Menu aria-hidden="true" size={22} />
+          <Menu aria-hidden="true" size={21} />
         </button>
-      )}
+
+        <a className="mobile-topbar-brand" href="#beranda" onClick={closeMenu}>
+          <span>{BUSINESS_NAME}</span>
+          <small>Buka {STORE_HOURS}</small>
+        </a>
+
+        <a className="mobile-topbar-wa" href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" aria-label="Chat WhatsApp Nafis Jaya Accu">
+          <Image src="/whatsapp-icon.svg" alt="" width={22} height={22} aria-hidden="true" />
+        </a>
+      </header>
 
       <div
         className={cn("sidebar-backdrop", isOpen && "is-visible")}
@@ -155,6 +160,15 @@ export default function Sidebar() {
           </div>
         </div>
       </aside>
+
+      <nav className="mobile-bottom-nav" aria-label="Navigasi cepat mobile">
+        {mobileNavItems.map(({ id, label, icon: Icon }) => (
+          <a key={id} className={cn(activeSection === id && "is-active")} href={`#${id}`}>
+            <Icon size={17} aria-hidden="true" />
+            <span>{label}</span>
+          </a>
+        ))}
+      </nav>
     </>
   );
 }
