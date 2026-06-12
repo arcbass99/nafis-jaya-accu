@@ -70,10 +70,10 @@ export default function Sidebar() {
         <button
           className="mobile-menu-button"
           type="button"
-          aria-label="Buka navigasi"
+          aria-label="Tutup navigasi"
           aria-controls="site-sidebar"
           aria-expanded="true"
-          onClick={() => setIsOpen(true)}
+          onClick={() => setIsOpen(false)}
         >
           <Menu aria-hidden="true" size={22} />
         </button>
