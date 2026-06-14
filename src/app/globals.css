@@ -3498,3 +3498,115 @@ h1 {
     grid-template-columns: minmax(0, 1fr);
   }
 }
+
+/* Hero scroll animation patch: replaces the old right-side service console with the battery-box frame sequence. */
+.hero-grid-with-animation {
+  grid-template-columns: minmax(0, 1.618fr) minmax(18rem, 1fr);
+  align-items: center;
+}
+
+.hero-visual {
+  position: relative;
+  display: grid;
+  min-width: 0;
+  place-items: center;
+}
+
+.hero-animation-card {
+  position: relative;
+  width: min(100%, 25.5rem);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+  border-radius: var(--radius-xl);
+  background:
+    radial-gradient(circle at 50% 54%, rgba(47, 227, 255, 0.13), transparent 58%),
+    radial-gradient(circle at 72% 34%, rgba(255, 209, 102, 0.08), transparent 42%);
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.hero-animation-card::before {
+  position: absolute;
+  inset: 14% 8% 8%;
+  z-index: -1;
+  border-radius: 999rem;
+  content: "";
+  background: rgba(47, 227, 255, 0.08);
+  filter: blur(2.25rem);
+}
+
+.battery-box-animation {
+  position: relative;
+  width: min(100%, 24rem);
+  aspect-ratio: 1 / 1;
+  display: grid;
+  place-items: center;
+  isolation: isolate;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+.battery-box-animation__frame {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+  pointer-events: none;
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+.asset-protected,
+.asset-protected * {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+@media (min-width: 1181px) and (max-width: 1440px) {
+  .hero-grid-with-animation {
+    grid-template-columns: minmax(0, 1.7fr) minmax(16.5rem, 0.95fr);
+  }
+
+  .hero-animation-card {
+    width: min(100%, 21.5rem);
+  }
+
+  .battery-box-animation {
+    width: min(100%, 20.25rem);
+  }
+}
+
+@media (max-width: 980px) {
+  .hero-grid-with-animation {
+    grid-template-columns: 1fr;
+  }
+
+  .hero-visual {
+    order: -1;
+  }
+
+  .hero-animation-card {
+    width: min(100%, 21rem);
+    margin-inline: auto;
+  }
+
+  .battery-box-animation {
+    width: min(100%, 20rem);
+  }
+}
+
+@media (max-width: 560px) {
+  .hero-animation-card {
+    width: min(100%, 18rem);
+  }
+
+  .battery-box-animation {
+    width: min(100%, 17rem);
+  }
+}

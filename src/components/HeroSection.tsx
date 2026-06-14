@@ -1,11 +1,5 @@
-import { Battery, Clock3, MapPinned, ShieldCheck, Wrench } from "lucide-react";
-import { SERVICE_AREA, STORE_HOURS } from "@/lib/constants";
-
-const heroStats = [
-  { label: "Jam buka", value: STORE_HOURS, icon: Clock3 },
-  { label: "Area utama", value: SERVICE_AREA, icon: MapPinned },
-  { label: "Layanan", value: "Cek, pasang, setrum, tukar tambah", icon: Wrench },
-];
+import BatteryBoxScrollAnimation from "./BatteryBoxScrollAnimation";
+import styles from "./HeroSection.module.css";
 
 export default function HeroSection() {
   return (
@@ -35,41 +29,8 @@ export default function HeroSection() {
           </p>
         </div>
 
-        <div className="hero-console glass-panel" aria-label="Ringkasan layanan toko">
-          <div className="console-header">
-            <div>
-              <span className="status-pulse" aria-hidden="true" />
-              <span>Siap konsultasi</span>
-            </div>
-            <Battery size={24} aria-hidden="true" />
-          </div>
-
-          <div className="charge-card" aria-hidden="true">
-            <span>Battery Service</span>
-            <div className="charge-shell">
-              <i />
-            </div>
-          </div>
-
-          <div className="hero-stat-list">
-            {heroStats.map((stat) => {
-              const Icon = stat.icon;
-              return (
-                <div className="hero-stat" key={stat.label}>
-                  <Icon size={20} aria-hidden="true" />
-                  <div>
-                    <span>{stat.label}</span>
-                    <strong>{stat.value}</strong>
-                  </div>
-                </div>
-              );
-            })}
-          </div>
-
-          <div className="console-badge">
-            <ShieldCheck size={18} aria-hidden="true" />
-            Cek & pasang tersedia di toko
-          </div>
+        <div className={styles.visualPanel} aria-hidden="true">
+          <BatteryBoxScrollAnimation startVisibleRatio={0.1} endViewportRatio={0.18} />
         </div>
       </div>
     </section>
