@@ -12,7 +12,13 @@ const statusItems = [
 
 export default function StatusBar() {
   return (
-    <section className="status-section" aria-label="Info cepat Nafis Jaya Accu">
+    <section className="status-section" aria-labelledby="status-title">
+      <div className="status-heading">
+        <p className="section-kicker">Info Cepat</p>
+        <h2 id="status-title">Layanan inti dalam satu ringkasan.</h2>
+        <p>Jam buka, area utama, dan layanan penting diringkas di sini agar tidak dobel di bagian awal.</p>
+      </div>
+
       <div className="status-grid">
         {statusItems.map((item) => {
           const Icon = item.icon;

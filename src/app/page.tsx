@@ -8,7 +8,6 @@ import LocationMap from "@/components/LocationMap";
 import ServiceArea from "@/components/ServiceArea";
 import ServicesSection from "@/components/ServicesSection";
 import Sidebar from "@/components/Sidebar";
-import StatusBar from "@/components/StatusBar";
 
 export default function Home() {
   return (
@@ -16,7 +15,6 @@ export default function Home() {
       <Sidebar />
       <main className="app-main">
         <HeroSection />
-        <StatusBar />
         <BatterySearch />
         <ServicesSection />
         <HowToOrder />
