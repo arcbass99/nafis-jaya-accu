@@ -1,7 +1,7 @@
+import Link from "next/link";
 import { BatteryCharging, Clock3, MapPin, RefreshCcw, SearchCheck, Wrench, Zap } from "lucide-react";
 import { services } from "@/data/services";
 import { SERVICE_AREA, STORE_HOURS } from "@/lib/constants";
-import SectionLink from "./SectionLink";
 
 const iconMap = {
   battery: BatteryCharging,
@@ -25,19 +25,19 @@ export default function ServicesSection() {
             <Wrench size={16} aria-hidden="true" />
             Layanan toko
           </p>
-          <h2 id="services-title">Layanan Aki & Perlengkapan</h2>
+          <h2 id="services-title">Layanan Aki Nafis Jaya Accu</h2>
         </div>
         <p>
-          Satu tempat untuk cari aki baru, cek dan pasang di toko, setrum, tukar tambah, sampai perlengkapan kecil seputar aki.
+          Jual aki mobil dan motor, cek dan pasang di toko, setrum/cas aki, tukar tambah, serta perlengkapan aki.
         </p>
       </div>
 
       <div className="service-overview glass-panel" aria-label="Ringkasan operasional layanan">
         <div className="service-overview-copy">
-          <span>Info layanan</span>
-          <strong>Jam, area, dan opsi pemasangan diringkas langsung di bagian layanan.</strong>
+          <span>Info operasional</span>
+          <strong>Datang ke toko untuk cek/pasang, atau chat admin dulu untuk memastikan stok dan opsi layanan.</strong>
           <p>
-            Untuk antar atau pemasangan di lokasi, konfirmasi dulu via WhatsApp sesuai jarak, stok, dan kondisi lokasi.
+            Untuk antar atau pemasangan di lokasi, konfirmasi via WhatsApp sesuai jarak, stok, dan kondisi lokasi.
           </p>
         </div>
 
@@ -76,9 +76,9 @@ export default function ServicesSection() {
         <p>
           Stok, merek, harga, dan opsi tukar tambah dikonfirmasi agar sesuai dengan kondisi kendaraan dan ketersediaan terbaru.
         </p>
-        <SectionLink className="text-link" sectionId="cari-aki">
+        <Link className="text-link" href="/pesan-aki">
           Cari tipe aki dulu
-        </SectionLink>
+        </Link>
       </div>
     </section>
   );

@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { BatteryCharging } from "lucide-react";
 import {
   BUSINESS_NAME,
@@ -8,7 +9,6 @@ import {
   STORE_HOURS,
   WHATSAPP_URL,
 } from "@/lib/constants";
-import SectionLink from "./SectionLink";
 
 export default function Footer() {
   return (
@@ -28,9 +28,9 @@ export default function Footer() {
           <div>
             <h3>Navigasi</h3>
             {navItems.map((item) => (
-              <SectionLink key={item.id} sectionId={item.id}>
+              <Link key={item.href} href={item.href}>
                 {item.label}
-              </SectionLink>
+              </Link>
             ))}
           </div>
           <div>

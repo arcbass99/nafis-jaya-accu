@@ -3972,3 +3972,291 @@ h1 {
     grid-template-columns: 1fr;
   }
 }
+
+/* Multi-page structure: home becomes a lightweight landing page, while catalog, services, and location live on dedicated routes. */
+.page-intro-section {
+  padding-bottom: clamp(1.2rem, 2.5vw, 2.1rem);
+}
+
+.page-intro {
+  position: relative;
+  overflow: hidden;
+  padding: clamp(1.25rem, 3vw, 2rem);
+}
+
+.page-intro::before {
+  position: absolute;
+  inset: -45% -12% auto auto;
+  width: 20rem;
+  height: 20rem;
+  border-radius: 999rem;
+  content: "";
+  pointer-events: none;
+  background: rgba(47, 227, 255, 0.12);
+  filter: blur(4rem);
+}
+
+.page-intro > * {
+  position: relative;
+}
+
+.page-intro h1 {
+  max-width: 15ch;
+  margin-bottom: var(--space-3);
+  font-size: clamp(2rem, 4.2vw, 4rem);
+}
+
+.page-intro p:not(.section-kicker) {
+  max-width: 52rem;
+  margin-bottom: 0;
+  color: #d6e1ee;
+  font-size: clamp(0.95rem, 1.15vw, 1.1rem);
+  line-height: 1.62;
+}
+
+.page-intro-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-2);
+  margin-top: var(--space-4);
+}
+
+.home-pathways-section {
+  padding-top: clamp(1.6rem, 3.2vw, 2.8rem);
+}
+
+.home-pathway-grid {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: var(--space-3);
+}
+
+.home-pathway-card {
+  display: grid;
+  min-height: 13rem;
+  gap: var(--space-2);
+  align-content: start;
+  padding: var(--space-4);
+  transition: border-color 160ms ease, background 160ms ease;
+}
+
+.home-pathway-card:hover {
+  border-color: var(--border-strong);
+  background:
+    linear-gradient(145deg, rgba(47, 227, 255, 0.09), rgba(255, 209, 102, 0.035)),
+    var(--surface);
+}
+
+.home-pathway-icon {
+  display: grid;
+  width: 2.5rem;
+  height: 2.5rem;
+  place-items: center;
+  border: 1px solid rgba(47, 227, 255, 0.34);
+  border-radius: var(--radius-md);
+  color: var(--cyan);
+  background: rgba(47, 227, 255, 0.11);
+}
+
+.home-pathway-card h3 {
+  margin: 0;
+  color: var(--text);
+}
+
+.home-pathway-card p {
+  margin: 0;
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.52;
+}
+
+.home-pathway-card strong {
+  align-self: end;
+  color: var(--cyan);
+  font-size: 0.84rem;
+}
+
+@media (max-width: 980px) {
+  .home-pathway-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .home-pathway-card {
+  }
+}
+
+@media (max-width: 720px) {
+  .page-intro {
+    padding: var(--space-4);
+  }
+
+  .page-intro h1 {
+    font-size: clamp(1.85rem, 9vw, 2.85rem);
+  }
+}
+
+/* Multipage polish pass: route-aware spacing, clearer hierarchy, and phi-balanced sections. */
+:root {
+  --topbar-safe-space: clamp(5.5rem, 7vw, 6.35rem);
+  --topbar-safe-space-mobile: clamp(4.85rem, 12vw, 5.65rem);
+  --sticky-safe-top: clamp(5.75rem, 7.4vw, 6.65rem);
+  --page-section-gap: clamp(2.4rem, 4vw, 4.2rem);
+}
+
+html {
+  scroll-padding-top: var(--sticky-safe-top);
+}
+
+.app-main {
+  padding-top: var(--topbar-safe-space) !important;
+}
+
+.section {
+  scroll-margin-top: var(--sticky-safe-top);
+}
+
+.hero-section:first-child {
+  padding-top: clamp(1.1rem, 2.2vw, 2rem);
+}
+
+.page-intro-section:first-child {
+  padding-top: clamp(1rem, 2vw, 1.6rem);
+}
+
+.page-intro-section + .section {
+  padding-top: clamp(1rem, 2.2vw, 1.8rem);
+}
+
+.page-intro {
+  display: grid;
+  grid-template-columns: minmax(0, 1.618fr) minmax(14rem, 1fr);
+  gap: var(--space-4);
+  align-items: end;
+}
+
+.page-intro .section-kicker,
+.page-intro h1,
+.page-intro p:not(.section-kicker) {
+  grid-column: 1;
+}
+
+.page-intro h1 {
+  max-width: 13.4ch;
+  font-size: clamp(2rem, 3.7vw, 3.55rem);
+}
+
+.page-intro p:not(.section-kicker) {
+  max-width: 45rem;
+  font-size: clamp(0.92rem, 1vw, 1.04rem);
+}
+
+.home-pathway-grid {
+  grid-template-columns: minmax(0, 1.618fr) minmax(0, 1fr) minmax(0, 1fr);
+}
+
+.home-pathway-card {
+  min-height: 11.2rem;
+}
+
+.home-pathway-card:first-child {
+  background:
+    linear-gradient(145deg, rgba(47, 227, 255, 0.105), rgba(255, 209, 102, 0.038)),
+    var(--surface);
+  border-color: rgba(47, 227, 255, 0.25);
+}
+
+.home-pathway-card strong {
+  margin-top: auto;
+}
+
+.service-overview {
+  grid-template-columns: minmax(0, 1fr) minmax(0, 1.618fr);
+  margin-bottom: var(--space-4);
+}
+
+.service-overview-copy strong {
+  max-width: 30rem;
+}
+
+.service-overview-copy p {
+  max-width: 32rem;
+}
+
+.service-overview-card {
+  min-height: 4.25rem;
+}
+
+.services-grid {
+  margin-top: var(--space-3);
+}
+
+.order-summary {
+  top: var(--sticky-safe-top);
+}
+
+.final-cta {
+  display: grid;
+  grid-template-columns: minmax(0, 1.618fr) minmax(13rem, 1fr);
+}
+
+.final-cta h2 {
+  max-width: 14ch;
+}
+
+
+@media (max-width: 980px) {
+  :root {
+    --topbar-safe-space: var(--topbar-safe-space-mobile);
+    --sticky-safe-top: clamp(5rem, 13vw, 5.85rem);
+  }
+
+  .app-main {
+    padding-top: var(--topbar-safe-space) !important;
+  }
+
+  .page-intro,
+  .final-cta,
+  .service-overview {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .page-intro .section-kicker,
+  .page-intro h1,
+  .page-intro p:not(.section-kicker) {
+    grid-column: auto;
+  }
+
+  .page-intro h1 {
+    max-width: 12.2ch;
+  }
+
+  .home-pathway-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .home-pathway-card {
+  }
+
+  .order-summary {
+    top: auto;
+  }
+}
+
+@media (max-width: 720px) {
+  .page-intro-section:first-child,
+  .hero-section:first-child {
+    padding-top: 0.85rem;
+  }
+
+  .page-intro {
+    padding: 1rem;
+  }
+
+  .page-intro h1 {
+    max-width: 11.5ch;
+  }
+
+  .service-overview-grid {
+    grid-template-columns: minmax(0, 1fr);
+  }
+}

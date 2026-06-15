@@ -1,7 +1,9 @@
 "use client";
 
 import Image from "next/image";
-import { BatteryCharging, Clock3, Menu, MapPin, MessageCircle, Search, Wrench, X } from "lucide-react";
+import Link from "next/link";
+import { usePathname } from "next/navigation";
+import { BatteryCharging, Clock3, Home, Menu, MapPin, Search, Wrench, X } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   BUSINESS_NAME,
@@ -12,18 +14,22 @@ import {
   WHATSAPP_URL,
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
-import SectionLink from "./SectionLink";
 
 const mobileNavItems = [
-  { id: "cari-aki", label: "Cari", icon: Search },
-  { id: "layanan", label: "Layanan", icon: Wrench },
-  { id: "lokasi", label: "Lokasi", icon: MapPin },
-  { id: "faq", label: "FAQ", icon: MessageCircle },
+  { href: "/", label: "Home", icon: Home },
+  { href: "/pesan-aki", label: "Pesan", icon: Search },
+  { href: "/layanan", label: "Layanan", icon: Wrench },
+  { href: "/lokasi", label: "Lokasi", icon: MapPin },
 ] as const;
 
+const isActivePath = (pathname: string, href: string) => {
+  if (href === "/") return pathname === "/";
+  return pathname === href || pathname.startsWith(`${href}/`);
+};
+
 export default function Sidebar() {
+  const pathname = usePathname();
   const [isOpen, setIsOpen] = useState(false);
-  const [activeSection, setActiveSection] = useState<string>("beranda");
   const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
@@ -33,23 +39,8 @@ export default function Sidebar() {
     const updateScrollState = () => {
       const maxScroll = document.documentElement.scrollHeight - window.innerHeight;
       const nextProgress = maxScroll > 0 ? Math.min(Math.max(window.scrollY / maxScroll, 0), 1) : 0;
-      const anchor = window.scrollY + Math.min(window.innerHeight * 0.38, 260);
-      let nextActive: string = navItems[0]?.id ?? "beranda";
-
-      for (const item of navItems) {
-        const section = document.getElementById(item.id);
-        if (!section) continue;
-
-        const top = section.getBoundingClientRect().top + window.scrollY;
-        if (top <= anchor) nextActive = item.id;
-      }
-
-      if (maxScroll > 0 && maxScroll - window.scrollY < 24) {
-        nextActive = navItems[navItems.length - 1]?.id ?? nextActive;
-      }
 
       setScrollProgress(nextProgress);
-      setActiveSection(nextActive);
       ticking = false;
     };
 
@@ -68,21 +59,6 @@ export default function Sidebar() {
       window.removeEventListener("scroll", requestUpdate);
       window.removeEventListener("resize", requestUpdate);
     };
-  }, []);
-
-  useEffect(() => {
-    const sectionId = decodeURIComponent(window.location.hash.replace("#", ""));
-    if (!sectionId || !navItems.some((item) => item.id === sectionId)) return;
-
-    const frame = window.requestAnimationFrame(() => {
-      const section = document.getElementById(sectionId);
-      if (!section) return;
-
-      section.scrollIntoView({ behavior: "auto", block: "start" });
-      window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
-    });
-
-    return () => window.cancelAnimationFrame(frame);
   }, []);
 
   const closeMenu = () => setIsOpen(false);
@@ -114,10 +90,10 @@ export default function Sidebar() {
           </button>
         )}
 
-        <SectionLink className="mobile-topbar-brand" sectionId="beranda" onNavigate={closeMenu}>
+        <Link className="mobile-topbar-brand" href="/" onClick={closeMenu}>
           <span>{BUSINESS_NAME}</span>
           <small>Buka {STORE_HOURS}</small>
-        </SectionLink>
+        </Link>
 
         <a className="mobile-topbar-wa" href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" aria-label="Chat WhatsApp Nafis Jaya Accu">
           <Image src="/whatsapp-icon.svg" alt="" width={22} height={22} aria-hidden="true" />
@@ -141,10 +117,10 @@ export default function Sidebar() {
             </button>
           </div>
 
-          <SectionLink className="sidebar-brand" sectionId="beranda" onNavigate={closeMenu}>
+          <Link className="sidebar-brand" href="/" onClick={closeMenu}>
             <span>{BUSINESS_NAME}</span>
             <small>{BUSINESS_TAGLINE}</small>
-          </SectionLink>
+          </Link>
 
           <progress
             className="battery-progress"
@@ -155,15 +131,15 @@ export default function Sidebar() {
 
           <nav className="sidebar-nav">
             {navItems.map((item) => (
-              <SectionLink
-                key={item.id}
-                className={cn("sidebar-link", activeSection === item.id && "is-active")}
-                sectionId={item.id}
-                onNavigate={closeMenu}
+              <Link
+                key={item.href}
+                className={cn("sidebar-link", isActivePath(pathname, item.href) && "is-active")}
+                href={item.href}
+                onClick={closeMenu}
               >
                 <span className="sidebar-dot" aria-hidden="true" />
                 {item.label}
-              </SectionLink>
+              </Link>
             ))}
           </nav>
 
@@ -191,11 +167,11 @@ export default function Sidebar() {
       </aside>
 
       <nav className="mobile-bottom-nav" aria-label="Navigasi cepat mobile">
-        {mobileNavItems.map(({ id, label, icon: Icon }) => (
-          <SectionLink key={id} className={cn(activeSection === id && "is-active")} sectionId={id}>
+        {mobileNavItems.map(({ href, label, icon: Icon }) => (
+          <Link key={href} className={cn(isActivePath(pathname, href) && "is-active")} href={href}>
             <Icon size={17} aria-hidden="true" />
             <span>{label}</span>
-          </SectionLink>
+          </Link>
         ))}
       </nav>
     </>

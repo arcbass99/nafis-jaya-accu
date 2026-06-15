@@ -1,6 +1,5 @@
 import { MapPinned, Navigation, ShieldAlert } from "lucide-react";
-import { SERVICE_AREA } from "@/lib/constants";
-import SectionLink from "./SectionLink";
+import { GOOGLE_MAPS_URL, SERVICE_AREA } from "@/lib/constants";
 
 export default function ServiceArea() {
   return (
@@ -15,9 +14,9 @@ export default function ServiceArea() {
           <p>
             Area utama Nafis Jaya Accu adalah {SERVICE_AREA}. Untuk antar atau pasang di lokasi, konfirmasi dulu agar admin bisa mengecek jarak, stok, dan estimasi layanan.
           </p>
-          <SectionLink className="btn btn-secondary" sectionId="lokasi">
-            Lihat Lokasi Toko
-          </SectionLink>
+          <a className="btn btn-secondary" href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer">
+            Buka Google Maps
+          </a>
         </div>
 
         <div className="area-mini-map" aria-hidden="true">
