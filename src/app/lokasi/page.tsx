@@ -1,19 +1,24 @@
-import type { Metadata } from "next";
 import AppShell from "@/components/AppShell";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
 import LocationMap from "@/components/LocationMap";
 import PageIntro from "@/components/PageIntro";
 import ServiceArea from "@/components/ServiceArea";
-import { BUSINESS_NAME, SERVICE_AREA } from "@/lib/constants";
+import { createPageMetadata, pageDescriptions } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: `Lokasi Toko | ${BUSINESS_NAME}`,
-  description: `Lihat lokasi Nafis Jaya Accu, area layanan ${SERVICE_AREA}, jam buka, dan tombol Google Maps untuk navigasi langsung ke toko.`,
-  alternates: {
-    canonical: "/lokasi",
-  },
-};
+export const metadata = createPageMetadata({
+  title: "Lokasi Toko Aki Nafis Jaya Accu",
+  description: pageDescriptions.lokasi,
+  path: "/lokasi",
+  keywords: [
+    "lokasi Nafis Jaya Accu",
+    "lokasi toko aki",
+    "toko aki terdekat",
+    "toko aki Surabaya",
+    "toko aki Sidoarjo",
+    "Google Maps Nafis Jaya Accu",
+  ],
+});
 
 export default function LokasiPage() {
   return (

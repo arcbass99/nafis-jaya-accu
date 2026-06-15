@@ -1,20 +1,24 @@
-import type { Metadata } from "next";
 import AppShell from "@/components/AppShell";
 import FAQSection from "@/components/FAQSection";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
 import HomePathways from "@/components/HomePathways";
-import { BUSINESS_NAME } from "@/lib/constants";
+import { createPageMetadata, pageDescriptions } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: `${BUSINESS_NAME} | Aki Mobil & Motor Surabaya-Sidoarjo`,
-  description:
-    "Nafis Jaya Accu menyediakan aki mobil, aki motor, setrum aki, tukar tambah, dan perlengkapan aki untuk Surabaya, Sidoarjo, dan sekitarnya.",
-  alternates: {
-    canonical: "/",
-  },
-};
+export const metadata = createPageMetadata({
+  title: "Aki Mobil & Motor Surabaya-Sidoarjo",
+  description: pageDescriptions.home,
+  path: "/",
+  keywords: [
+    "Nafis Jaya Accu",
+    "toko aki Surabaya",
+    "toko aki Sidoarjo",
+    "aki mobil Surabaya Sidoarjo",
+    "aki motor Surabaya Sidoarjo",
+    "pesan aki via WhatsApp",
+  ],
+});
 
 export default function Home() {
   return (

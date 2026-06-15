@@ -1,20 +1,28 @@
-import type { Metadata } from "next";
 import AppShell from "@/components/AppShell";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
 import HowToOrder from "@/components/HowToOrder";
 import PageIntro from "@/components/PageIntro";
 import ServicesSection from "@/components/ServicesSection";
-import { BUSINESS_NAME } from "@/lib/constants";
+import { createPageMetadata, pageDescriptions } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: `Layanan Aki | ${BUSINESS_NAME}`,
-  description:
-    "Layanan jual aki mobil dan motor, cek dan pasang di toko, setrum aki, tukar tambah, serta perlengkapan aki di Nafis Jaya Accu.",
-  alternates: {
-    canonical: "/layanan",
-  },
-};
+export const metadata = createPageMetadata({
+  title: "Layanan Aki, Setrum, dan Tukar Tambah",
+  description: pageDescriptions.layanan,
+  path: "/layanan",
+  keywords: [
+    "layanan aki Surabaya",
+    "setrum aki Surabaya",
+    "cas aki",
+    "tukar tambah aki",
+    "cek aki",
+    "pasang aki di toko",
+    "air aki",
+    "air zuur",
+    "clamp aki",
+    "kabel aki",
+  ],
+});
 
 export default function LayananPage() {
   return (

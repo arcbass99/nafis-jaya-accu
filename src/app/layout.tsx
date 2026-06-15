@@ -1,10 +1,10 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Plus_Jakarta_Sans } from "next/font/google";
+import type { ReactNode } from "react";
 import "leaflet/dist/leaflet.css";
 import "./globals.css";
-import { BUSINESS_NAME, GOOGLE_MAPS_URL, SERVICE_AREA, STORE_HOURS, WHATSAPP_URL } from "@/lib/constants";
-
-const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? "https://nafis-jaya-accu.vercel.app";
+import { BUSINESS_NAME, SERVICE_AREA, STORE_HOURS } from "@/lib/constants";
+import { DEFAULT_OG_IMAGE, SITE_URL, getLocalBusinessJsonLd, getWebsiteJsonLd } from "@/lib/seo";
 
 const plusJakarta = Plus_Jakarta_Sans({
   subsets: ["latin"],
@@ -14,59 +14,62 @@ const plusJakarta = Plus_Jakarta_Sans({
 });
 
 export const metadata: Metadata = {
-  metadataBase: new URL(siteUrl),
-  title: `${BUSINESS_NAME} | Aki Mobil & Motor Surabaya-Sidoarjo`,
-  description:
-    "Pesan aki mobil, aki motor, setrum aki, tukar tambah, dan perlengkapan aki di Nafis Jaya Accu untuk area Surabaya, Sidoarjo, dan sekitarnya.",
-  keywords: [
-    "Nafis Jaya Accu",
-    "aki Surabaya",
-    "aki Sidoarjo",
-    "aki mobil",
-    "aki motor",
-    "setrum aki",
-    "tukar tambah aki",
-    "air aki",
-    "air zuur",
-  ],
+  metadataBase: new URL(SITE_URL),
+  applicationName: BUSINESS_NAME,
+  title: {
+    default: `${BUSINESS_NAME} | Aki Mobil & Motor Surabaya-Sidoarjo`,
+    template: `%s | ${BUSINESS_NAME}`,
+  },
+  description: `Pesan aki mobil dan motor, setrum aki, tukar tambah, dan perlengkapan aki untuk ${SERVICE_AREA}. Buka ${STORE_HOURS}.`,
+  authors: [{ name: BUSINESS_NAME }],
+  creator: BUSINESS_NAME,
+  publisher: BUSINESS_NAME,
+  category: "local business",
+  formatDetection: {
+    telephone: false,
+    address: false,
+    email: false,
+  },
   openGraph: {
     title: `${BUSINESS_NAME} | Solusi Aki Surabaya-Sidoarjo`,
     description: `Aki mobil, motor, setrum, tukar tambah, dan perlengkapan aki. Buka ${STORE_HOURS}. Area ${SERVICE_AREA}.`,
+    url: SITE_URL,
+    siteName: BUSINESS_NAME,
     type: "website",
     locale: "id_ID",
-    images: [
-      {
-        url: "/og-image.png",
-        width: 1200,
-        height: 630,
-        alt: `${BUSINESS_NAME} preview`,
-      },
-    ],
+    images: [DEFAULT_OG_IMAGE],
   },
   twitter: {
     card: "summary_large_image",
     title: `${BUSINESS_NAME} | Aki Mobil & Motor`,
     description: `Buka ${STORE_HOURS}. Area ${SERVICE_AREA}. Konsultasi stok dan harga via WhatsApp.`,
-    images: ["/og-image.png"],
+    images: [DEFAULT_OG_IMAGE.url],
+  },
+  robots: {
+    index: true,
+    follow: true,
+    googleBot: {
+      index: true,
+      follow: true,
+      "max-image-preview": "large",
+      "max-snippet": -1,
+      "max-video-preview": -1,
+    },
   },
   alternates: {
     canonical: "/",
   },
 };
 
-export default function RootLayout({ children }: Readonly<{ children: React.ReactNode }>) {
-  const structuredData = {
-    "@context": "https://schema.org",
-    "@type": "AutoPartsStore",
-    name: BUSINESS_NAME,
-    description: "Toko aki mobil, aki motor, setrum aki, tukar tambah, dan perlengkapan aki.",
-    areaServed: SERVICE_AREA,
-    openingHours: "Mo-Su 06:00-21:00",
-    telephone: "+6281331289410",
-    hasMap: GOOGLE_MAPS_URL,
-    url: siteUrl,
-    sameAs: [WHATSAPP_URL, GOOGLE_MAPS_URL],
-  };
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+  themeColor: "#07090d",
+  colorScheme: "dark",
+};
+
+export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {
+  const structuredData = [getLocalBusinessJsonLd(), getWebsiteJsonLd()];
 
   return (
     <html lang="id" className={plusJakarta.variable}>

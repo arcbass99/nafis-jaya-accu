@@ -1,20 +1,27 @@
-import type { Metadata } from "next";
 import BatterySearch from "@/components/BatterySearch";
 import AppShell from "@/components/AppShell";
 import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
 import HowToOrder from "@/components/HowToOrder";
 import PageIntro from "@/components/PageIntro";
-import { BUSINESS_NAME } from "@/lib/constants";
+import { createPageMetadata, pageDescriptions } from "@/lib/seo";
 
-export const metadata: Metadata = {
-  title: `Pesan Aki | ${BUSINESS_NAME}`,
-  description:
-    "Cari tipe aki mobil dan motor sebagai panduan awal, lalu kirim ringkasan ke WhatsApp Nafis Jaya Accu untuk cek stok dan harga.",
-  alternates: {
-    canonical: "/pesan-aki",
-  },
-};
+export const metadata = createPageMetadata({
+  title: "Pesan Aki Mobil & Motor",
+  description: pageDescriptions.pesanAki,
+  path: "/pesan-aki",
+  keywords: [
+    "pesan aki mobil",
+    "pesan aki motor",
+    "katalog aki mobil",
+    "katalog aki motor",
+    "cek stok aki",
+    "harga aki Surabaya",
+    "aki MF kering",
+    "aki basah",
+    "VRLA",
+  ],
+});
 
 export default function PesanAkiPage() {
   return (
