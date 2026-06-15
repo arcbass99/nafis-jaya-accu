@@ -12,6 +12,7 @@ import {
   WHATSAPP_URL,
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+import SectionLink from "./SectionLink";
 
 const mobileNavItems = [
   { id: "cari-aki", label: "Cari", icon: Search },
@@ -69,6 +70,21 @@ export default function Sidebar() {
     };
   }, []);
 
+  useEffect(() => {
+    const sectionId = decodeURIComponent(window.location.hash.replace("#", ""));
+    if (!sectionId || !navItems.some((item) => item.id === sectionId)) return;
+
+    const frame = window.requestAnimationFrame(() => {
+      const section = document.getElementById(sectionId);
+      if (!section) return;
+
+      section.scrollIntoView({ behavior: "auto", block: "start" });
+      window.history.replaceState(null, "", `${window.location.pathname}${window.location.search}`);
+    });
+
+    return () => window.cancelAnimationFrame(frame);
+  }, []);
+
   const closeMenu = () => setIsOpen(false);
 
   return (
@@ -98,10 +114,10 @@ export default function Sidebar() {
           </button>
         )}
 
-        <a className="mobile-topbar-brand" href="#beranda" onClick={closeMenu}>
+        <SectionLink className="mobile-topbar-brand" sectionId="beranda" onNavigate={closeMenu}>
           <span>{BUSINESS_NAME}</span>
           <small>Buka {STORE_HOURS}</small>
-        </a>
+        </SectionLink>
 
         <a className="mobile-topbar-wa" href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer" aria-label="Chat WhatsApp Nafis Jaya Accu">
           <Image src="/whatsapp-icon.svg" alt="" width={22} height={22} aria-hidden="true" />
@@ -125,10 +141,10 @@ export default function Sidebar() {
             </button>
           </div>
 
-          <a className="sidebar-brand" href="#beranda" onClick={closeMenu}>
+          <SectionLink className="sidebar-brand" sectionId="beranda" onNavigate={closeMenu}>
             <span>{BUSINESS_NAME}</span>
             <small>{BUSINESS_TAGLINE}</small>
-          </a>
+          </SectionLink>
 
           <progress
             className="battery-progress"
@@ -139,15 +155,15 @@ export default function Sidebar() {
 
           <nav className="sidebar-nav">
             {navItems.map((item) => (
-              <a
+              <SectionLink
                 key={item.id}
                 className={cn("sidebar-link", activeSection === item.id && "is-active")}
-                href={`#${item.id}`}
-                onClick={closeMenu}
+                sectionId={item.id}
+                onNavigate={closeMenu}
               >
                 <span className="sidebar-dot" aria-hidden="true" />
                 {item.label}
-              </a>
+              </SectionLink>
             ))}
           </nav>
 
@@ -176,10 +192,10 @@ export default function Sidebar() {
 
       <nav className="mobile-bottom-nav" aria-label="Navigasi cepat mobile">
         {mobileNavItems.map(({ id, label, icon: Icon }) => (
-          <a key={id} className={cn(activeSection === id && "is-active")} href={`#${id}`}>
+          <SectionLink key={id} className={cn(activeSection === id && "is-active")} sectionId={id}>
             <Icon size={17} aria-hidden="true" />
             <span>{label}</span>
-          </a>
+          </SectionLink>
         ))}
       </nav>
     </>

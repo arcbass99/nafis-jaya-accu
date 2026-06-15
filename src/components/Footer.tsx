@@ -8,6 +8,7 @@ import {
   STORE_HOURS,
   WHATSAPP_URL,
 } from "@/lib/constants";
+import SectionLink from "./SectionLink";
 
 export default function Footer() {
   return (
@@ -27,9 +28,9 @@ export default function Footer() {
           <div>
             <h3>Navigasi</h3>
             {navItems.map((item) => (
-              <a key={item.id} href={`#${item.id}`}>
+              <SectionLink key={item.id} sectionId={item.id}>
                 {item.label}
-              </a>
+              </SectionLink>
             ))}
           </div>
           <div>

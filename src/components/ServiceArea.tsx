@@ -1,5 +1,6 @@
 import { MapPinned, Navigation, ShieldAlert } from "lucide-react";
 import { SERVICE_AREA } from "@/lib/constants";
+import SectionLink from "./SectionLink";
 
 export default function ServiceArea() {
   return (
@@ -14,9 +15,9 @@ export default function ServiceArea() {
           <p>
             Area utama Nafis Jaya Accu adalah {SERVICE_AREA}. Untuk antar atau pasang di lokasi, konfirmasi dulu agar admin bisa mengecek jarak, stok, dan estimasi layanan.
           </p>
-          <a className="btn btn-secondary" href="#lokasi">
+          <SectionLink className="btn btn-secondary" sectionId="lokasi">
             Lihat Lokasi Toko
-          </a>
+          </SectionLink>
         </div>
 
         <div className="area-mini-map" aria-hidden="true">

@@ -1,4 +1,5 @@
 import { BatteryCharging, MapPin } from "lucide-react";
+import SectionLink from "./SectionLink";
 
 export default function FinalCTA() {
   return (
@@ -15,13 +16,13 @@ export default function FinalCTA() {
           </p>
         </div>
         <div className="final-cta-actions">
-          <a className="btn btn-primary" href="#cari-aki">
+          <SectionLink className="btn btn-primary" sectionId="cari-aki">
             Cari Tipe Aki
-          </a>
-          <a className="btn btn-secondary" href="#lokasi">
+          </SectionLink>
+          <SectionLink className="btn btn-secondary" sectionId="lokasi">
             <MapPin size={19} aria-hidden="true" />
             Lihat Lokasi
-          </a>
+          </SectionLink>
         </div>
       </div>
     </section>

@@ -1,6 +1,7 @@
 import { BatteryCharging, Clock3, MapPin, RefreshCcw, SearchCheck, Wrench, Zap } from "lucide-react";
 import { services } from "@/data/services";
 import { SERVICE_AREA, STORE_HOURS } from "@/lib/constants";
+import SectionLink from "./SectionLink";
 
 const iconMap = {
   battery: BatteryCharging,
@@ -75,9 +76,9 @@ export default function ServicesSection() {
         <p>
           Stok, merek, harga, dan opsi tukar tambah dikonfirmasi agar sesuai dengan kondisi kendaraan dan ketersediaan terbaru.
         </p>
-        <a className="text-link" href="#cari-aki">
+        <SectionLink className="text-link" sectionId="cari-aki">
           Cari tipe aki dulu
-        </a>
+        </SectionLink>
       </div>
     </section>
   );

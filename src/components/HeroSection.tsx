@@ -1,4 +1,5 @@
 import BatteryBoxScrollAnimation from "./BatteryBoxScrollAnimation";
+import SectionLink from "./SectionLink";
 import styles from "./HeroSection.module.css";
 
 export default function HeroSection() {
@@ -16,12 +17,12 @@ export default function HeroSection() {
           </p>
 
           <div className="hero-actions" aria-label="Aksi utama">
-            <a className="btn btn-primary" href="#cari-aki">
+            <SectionLink className="btn btn-primary" sectionId="cari-aki">
               Cari Tipe Aki
-            </a>
-            <a className="btn btn-secondary" href="#lokasi">
+            </SectionLink>
+            <SectionLink className="btn btn-secondary" sectionId="lokasi">
               Lihat Lokasi Toko
-            </a>
+            </SectionLink>
           </div>
 
           <p className="hero-note">
