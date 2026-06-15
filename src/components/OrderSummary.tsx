@@ -1,7 +1,8 @@
 "use client";
 
 import Image from "next/image";
-import { AlertCircle, MapPin, Trash2 } from "lucide-react";
+import { AlertCircle, CheckCircle2, MapPin, Trash2 } from "lucide-react";
+import { WHATSAPP_URL } from "@/lib/constants";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
 import { formatBatteryLine } from "@/lib/utils";
 import type { BatteryItem, OrderContext } from "@/types/battery";
@@ -33,8 +34,8 @@ export default function OrderSummary({
     <aside className="order-summary glass-panel" aria-labelledby="order-summary-title">
       <div className="summary-heading">
         <div>
-          <p className="section-kicker">Pesanan</p>
-          <h3 id="order-summary-title">Ringkasan Pesanan</h3>
+          <p className="section-kicker">Cek stok via WA</p>
+          <h3 id="order-summary-title">Ringkasan WhatsApp</h3>
         </div>
         <span className="summary-count" aria-label={`${selectedItems.length} aki dipilih`}>
           {selectedItems.length}
@@ -44,7 +45,7 @@ export default function OrderSummary({
       {selectedItems.length === 0 ? (
         <div className="summary-empty">
           <AlertCircle size={20} aria-hidden="true" />
-          <p>Belum ada aki yang dipilih. Kamu tetap bisa isi kendaraan atau lokasi untuk konsultasi dulu.</p>
+          <p>Belum ada aki yang dipilih. Isi kendaraan atau lokasi dulu jika ingin konsultasi tanpa memilih tipe aki.</p>
         </div>
       ) : (
         <ul className="summary-list" aria-label="Aki yang dipilih">
@@ -58,6 +59,17 @@ export default function OrderSummary({
           ))}
         </ul>
       )}
+
+      <div className="summary-assurance" aria-label="Jaminan alur konsultasi">
+        <span>
+          <CheckCircle2 size={14} aria-hidden="true" />
+          Draft tersimpan di perangkat
+        </span>
+        <span>
+          <CheckCircle2 size={14} aria-hidden="true" />
+          Stok dan harga dicek manual
+        </span>
+      </div>
 
       <div className="order-form">
         <label htmlFor="vehicle-input">Nama kendaraan</label>
@@ -93,7 +105,7 @@ export default function OrderSummary({
 
       <a
         className="btn btn-primary summary-cta"
-        href={canSendDetailedMessage ? whatsappUrl : "https://wa.me/6281331289410"}
+        href={canSendDetailedMessage ? whatsappUrl : WHATSAPP_URL}
         target="_blank"
         rel="noopener noreferrer"
       >
@@ -103,7 +115,7 @@ export default function OrderSummary({
 
       <p className="summary-microcopy">
         <MapPin size={15} aria-hidden="true" />
-        Data ini hanya dibawa ke pesan WhatsApp, tidak disimpan ke server.
+        Data ini hanya dibawa ke pesan WhatsApp dan tersimpan sebagai draft di perangkatmu, bukan dikirim ke server.
       </p>
     </aside>
   );

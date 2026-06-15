@@ -29,7 +29,7 @@ export default function PesanAkiPage() {
       <PageIntro
         kicker="Katalog aki"
         title="Cari dan Pesan Aki yang Cocok"
-        description="Pilih tipe aki sebagai panduan awal. Stok, harga, merek, dan opsi pemasangan dikonfirmasi via WhatsApp agar sesuai kendaraan dan kebutuhanmu."
+        description="Gunakan katalog sebagai panduan belanja aki: cari berdasarkan kendaraan atau kode aki, pilih tipe yang mendekati, lalu kirim ringkasan ke WhatsApp untuk cek stok, harga, merek, dan opsi pemasangan."
       />
       <BatterySearch />
       <HowToOrder />
@@ -37,7 +37,7 @@ export default function PesanAkiPage() {
         kicker="Belum ketemu?"
         title="Belum Menemukan Tipe Aki?"
         description="Kirim detail kendaraan ke admin agar pilihan aki, stok, dan opsi pemasangan bisa dicek lebih tepat."
-        primaryLabel="Chat Lewat Katalog"
+        primaryLabel="Kembali ke Katalog"
         primaryHref="/pesan-aki"
         secondaryLabel="Lihat Lokasi"
         secondaryHref="/lokasi"
