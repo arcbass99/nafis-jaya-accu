@@ -18,10 +18,13 @@ export default function HeroSection() {
 
           <div className="hero-actions" aria-label="Aksi utama">
             <Link className="btn btn-primary" href="/pesan-aki">
-              Cari Tipe Aki
+              Cari Tipe dan Pesan Aki
             </Link>
             <Link className="btn btn-secondary" href="/lokasi">
               Lihat Lokasi Toko
+            </Link>
+            <Link className="btn btn-secondary" href="/layanan">
+              Layanan Toko
             </Link>
           </div>
 

@@ -1,5 +1,4 @@
 import AppShell from "@/components/AppShell";
-import FinalCTA from "@/components/FinalCTA";
 import Footer from "@/components/Footer";
 import LocationMap from "@/components/LocationMap";
 import PageIntro from "@/components/PageIntro";
@@ -30,15 +29,6 @@ export default function LokasiPage() {
       />
       <ServiceArea />
       <LocationMap />
-      <FinalCTA
-        kicker="Mau datang?"
-        title="Cek Stok Sebelum ke Toko"
-        description="Chat admin dulu jika ingin memastikan tipe aki, stok, harga, atau layanan sebelum berangkat ke lokasi."
-        primaryLabel="Cari Tipe Aki"
-        primaryHref="/pesan-aki"
-        secondaryLabel="Buka Lokasi"
-        secondaryHref="/lokasi"
-      />
       <Footer />
     </AppShell>
   );

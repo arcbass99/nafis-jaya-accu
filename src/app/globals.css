@@ -1284,30 +1284,29 @@ p {
   overflow: hidden;
 }
 
-.faq-item summary {
+.faq-summary {
   cursor: pointer;
+  width: 100%;
+  text-align: left;
+  background: transparent;
+  border: none;
   padding: var(--space-4);
   color: var(--text);
   font-size: 1.0625rem;
   font-weight: 850;
-  list-style: none;
 }
 
-.faq-item summary::-webkit-details-marker {
-  display: none;
-}
-
-.faq-item summary::after {
+.faq-summary::after {
   float: right;
   color: var(--cyan);
   content: "+";
 }
 
-.faq-item[open] summary::after {
+.faq-item.is-open .faq-summary::after {
   content: "−";
 }
 
-.faq-item p {
+.faq-content {
   margin: 0;
   padding: 0 var(--space-4) var(--space-4);
 }
@@ -2312,12 +2311,12 @@ p {
   gap: var(--space-2);
 }
 
-.faq-item summary {
+.faq-summary {
   padding: 0.85rem 1rem;
   font-size: 0.86rem;
 }
 
-.faq-item p {
+.faq-content {
   padding: 0 1rem 0.9rem;
   font-size: 0.8rem;
 }
