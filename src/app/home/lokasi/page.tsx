@@ -1,8 +1,6 @@
 import AppShell from "@/components/AppShell";
 import Footer from "@/components/Footer";
 import LocationMap from "@/components/LocationMap";
-import PageIntro from "@/components/PageIntro";
-import ServiceArea from "@/components/ServiceArea";
 import { createPageMetadata, pageDescriptions } from "@/lib/seo";
 
 export const metadata = createPageMetadata({
@@ -22,12 +20,6 @@ export const metadata = createPageMetadata({
 export default function LokasiPage() {
   return (
     <AppShell>
-      <PageIntro
-        kicker="Lokasi toko"
-        title="Lokasi Nafis Jaya Accu"
-        description="Buka peta toko, cek area utama Surabaya-Sidoarjo, lalu gunakan Google Maps untuk navigasi langsung. Chat dulu jika ingin memastikan stok atau layanan sebelum datang."
-      />
-      <ServiceArea />
       <LocationMap />
       <Footer />
     </AppShell>

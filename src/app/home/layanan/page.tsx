@@ -1,6 +1,5 @@
 import AppShell from "@/components/AppShell";
 import Footer from "@/components/Footer";
-import PageIntro from "@/components/PageIntro";
 import ServicesSection from "@/components/ServicesSection";
 import { createPageMetadata, pageDescriptions } from "@/lib/seo";
 
@@ -25,11 +24,6 @@ export const metadata = createPageMetadata({
 export default function LayananPage() {
   return (
     <AppShell>
-      <PageIntro
-        kicker="Layanan toko"
-        title="Layanan Aki Nafis Jaya Accu"
-        description="Cek kebutuhan aki dalam satu tempat: beli aki mobil atau motor, setrum/cas aki, tukar tambah, cek dan pasang di toko, serta perlengkapan aki."
-      />
       <ServicesSection />
       <Footer />
     </AppShell>

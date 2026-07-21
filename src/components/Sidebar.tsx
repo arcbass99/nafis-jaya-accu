@@ -3,7 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BatteryCharging, Clock3, Home, Menu, MapPin, Search, Wrench, X } from "lucide-react";
+import { BatteryCharging, Clock3, Home, Menu, MapPin, Search, Wrench, X, Sparkles } from "lucide-react";
 import { useEffect, useState } from "react";
 import {
   BUSINESS_NAME,
@@ -145,8 +145,16 @@ export default function Sidebar() {
 
           <div className="sidebar-spacer" />
 
+          <Link className="sidebar-interactive-mode" href="/" onClick={closeMenu}>
+            <Sparkles size={16} aria-hidden="true" />
+            <span>
+              Mode Akses Cepat
+              <small>Rekomendasi otomatis</small>
+            </span>
+          </Link>
+
           <a className="sidebar-whatsapp" href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-            <Image src="/whatsapp-icon.svg" alt="" width={24} height={24} aria-hidden="true" />
+            <Image src="/whatsapp-icon.svg" alt="" width={18} height={18} aria-hidden="true" />
             <span>
               Chat WhatsApp
               <small>Cek stok & harga</small>
@@ -155,11 +163,11 @@ export default function Sidebar() {
 
           <div className="sidebar-status" aria-label="Info toko">
             <p>
-              <Clock3 size={16} aria-hidden="true" />
+              <Clock3 size={13} aria-hidden="true" />
               Buka {STORE_HOURS}
             </p>
             <p>
-              <MapPin size={16} aria-hidden="true" />
+              <MapPin size={13} aria-hidden="true" />
               {SERVICE_AREA}
             </p>
           </div>

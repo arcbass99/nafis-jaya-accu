@@ -35,6 +35,7 @@ export default function Footer() {
           </div>
           <div>
             <h3>Kontak Cepat</h3>
+            <Link href="/">Mode Akses Cepat</Link>
             <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
               WhatsApp Admin
             </a>
