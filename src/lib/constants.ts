@@ -15,10 +15,10 @@ export const STORE_HOURS = "06.00-21.00";
 export const SERVICE_AREA = "Surabaya, Sidoarjo, dan sekitarnya";
 
 export const navItems = [
-  { href: "/", label: "Beranda" },
-  { href: "/pesan-aki", label: "Pesan Aki" },
-  { href: "/layanan", label: "Layanan" },
-  { href: "/lokasi", label: "Lokasi" },
+  { href: "/home", label: "Beranda" },
+  { href: "/home/pesan-aki", label: "Pesan Aki" },
+  { href: "/home/layanan", label: "Layanan" },
+  { href: "/home/lokasi", label: "Lokasi" },
 ] as const;
 
 export const orderNeedOptions = [

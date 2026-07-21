@@ -16,14 +16,14 @@ import {
 import { cn } from "@/lib/utils";
 
 const mobileNavItems = [
-  { href: "/", label: "Home", icon: Home },
-  { href: "/pesan-aki", label: "Pesan", icon: Search },
-  { href: "/layanan", label: "Layanan", icon: Wrench },
-  { href: "/lokasi", label: "Lokasi", icon: MapPin },
+  { href: "/home", label: "Home", icon: Home },
+  { href: "/home/pesan-aki", label: "Pesan", icon: Search },
+  { href: "/home/layanan", label: "Layanan", icon: Wrench },
+  { href: "/home/lokasi", label: "Lokasi", icon: MapPin },
 ] as const;
 
 const isActivePath = (pathname: string, href: string) => {
-  if (href === "/") return pathname === "/";
+  if (href === "/home") return pathname === "/home";
   return pathname === href || pathname.startsWith(`${href}/`);
 };
 
@@ -90,7 +90,7 @@ export default function Sidebar() {
           </button>
         )}
 
-        <Link className="mobile-topbar-brand" href="/" onClick={closeMenu}>
+        <Link className="mobile-topbar-brand" href="/home" onClick={closeMenu}>
           <span>{BUSINESS_NAME}</span>
           <small>Buka {STORE_HOURS}</small>
         </Link>
@@ -117,7 +117,7 @@ export default function Sidebar() {
             </button>
           </div>
 
-          <Link className="sidebar-brand" href="/" onClick={closeMenu}>
+          <Link className="sidebar-brand" href="/home" onClick={closeMenu}>
             <span>{BUSINESS_NAME}</span>
             <small>{BUSINESS_TAGLINE}</small>
           </Link>

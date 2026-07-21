@@ -7,7 +7,7 @@ import { createPageMetadata, pageDescriptions } from "@/lib/seo";
 export const metadata = createPageMetadata({
   title: "Layanan Aki, Setrum, dan Tukar Tambah",
   description: pageDescriptions.layanan,
-  path: "/layanan",
+  path: "/home/layanan",
   keywords: [
     "layanan aki Surabaya",
     "setrum aki Surabaya",

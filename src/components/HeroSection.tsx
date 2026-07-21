@@ -17,13 +17,13 @@ export default function HeroSection() {
           </p>
 
           <div className="hero-actions" aria-label="Aksi utama">
-            <Link className="btn btn-primary" href="/pesan-aki">
+            <Link className="btn btn-primary" href="/home/pesan-aki">
               Cari Tipe dan Pesan Aki
             </Link>
-            <Link className="btn btn-secondary" href="/lokasi">
+            <Link className="btn btn-secondary" href="/home/lokasi">
               Lihat Lokasi Toko
             </Link>
-            <Link className="btn btn-secondary" href="/layanan">
+            <Link className="btn btn-secondary" href="/home/layanan">
               Layanan Toko
             </Link>
           </div>

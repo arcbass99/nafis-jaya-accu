@@ -76,7 +76,7 @@ export default function ServicesSection() {
         <p>
           Stok, merek, harga, dan opsi tukar tambah dikonfirmasi agar sesuai dengan kondisi kendaraan dan ketersediaan terbaru.
         </p>
-        <Link className="text-link" href="/pesan-aki">
+        <Link className="text-link" href="/home/pesan-aki">
           Cari tipe aki dulu
         </Link>
       </div>

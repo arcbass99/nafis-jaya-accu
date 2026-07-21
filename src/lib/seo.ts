@@ -32,7 +32,7 @@ const baseKeywords = [
 type PageMetadataInput = {
   title: string;
   description: string;
-  path: "/" | "/pesan-aki" | "/layanan" | "/lokasi";
+  path: "/" | "/home" | "/home/pesan-aki" | "/home/layanan" | "/home/lokasi";
   keywords?: string[];
 };
 

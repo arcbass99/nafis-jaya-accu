@@ -7,7 +7,7 @@ import { createPageMetadata, pageDescriptions } from "@/lib/seo";
 export const metadata = createPageMetadata({
   title: "Pesan Aki Mobil & Motor",
   description: pageDescriptions.pesanAki,
-  path: "/pesan-aki",
+  path: "/home/pesan-aki",
   keywords: [
     "pesan aki mobil",
     "pesan aki motor",
