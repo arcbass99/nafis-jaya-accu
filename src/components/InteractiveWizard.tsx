@@ -148,10 +148,6 @@ export default function InteractiveWizard() {
             <Home size={14} />
             <span>Masuk ke Halaman Utama</span>
           </Link>
-          <p className="wz-hours">
-            <Clock size={13} />
-            Buka {STORE_HOURS}
-          </p>
         </header>
 
         {/* ===== TWO COLUMN BODY ===== */}
