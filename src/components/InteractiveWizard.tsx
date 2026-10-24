@@ -7,11 +7,11 @@ import dynamic from "next/dynamic";
 import {
   Car, Bike, PackagePlus, ArrowRight, Home,
   Info, Plus, Minus, ShoppingCart, Zap, ChevronRight,
-  Droplet, Droplets, Cable, CircleDot, BatteryCharging,
-  Clock, CalendarCheck, Repeat2, SparklesIcon, Skull, FlaskConical
+  Droplet, Cable, CircleDot, BatteryCharging,
+  Clock, CalendarCheck, Repeat2, SparklesIcon, Skull
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { WHATSAPP_NUMBER, STORE_HOURS } from "@/lib/constants";
+import { WHATSAPP_NUMBER, GOOGLE_MAPS_URL } from "@/lib/constants";
 import "./InteractiveWizard.css";
 
 const GREETINGS = [
@@ -77,8 +77,11 @@ export default function InteractiveWizard() {
   const flowRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
-    setGreeting(GREETINGS[Math.floor(Math.random() * GREETINGS.length)]);
-    setIsLoaded(true);
+    const timer = setTimeout(() => {
+      setGreeting(GREETINGS[Math.floor(Math.random() * GREETINGS.length)]);
+      setIsLoaded(true);
+    }, 0);
+    return () => clearTimeout(timer);
   }, []);
 
   useEffect(() => {
@@ -195,7 +198,7 @@ export default function InteractiveWizard() {
                 <div className="wz-mini-map-container">
                   <LeafletMap />
                 </div>
-                <a href="https://maps.app.goo.gl/3K2zPz48u1X2zZ1u6" target="_blank" rel="noreferrer" className="wz-mini-map-btn">
+                <a href={GOOGLE_MAPS_URL} target="_blank" rel="noreferrer" className="wz-mini-map-btn">
                   Buka di Google Maps <ChevronRight size={14} />
                 </a>
               </div>

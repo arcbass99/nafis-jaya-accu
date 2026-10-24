@@ -66,29 +66,16 @@ export default function Sidebar() {
   return (
     <>
       <header className="mobile-topbar" aria-label="Navigasi utama">
-        {isOpen ? (
-          <button
-            className="mobile-menu-button"
-            type="button"
-            aria-label="Buka navigasi"
-            aria-controls="site-sidebar"
-            aria-expanded="true"
-            onClick={() => setIsOpen(true)}
-          >
-            <Menu aria-hidden="true" size={21} />
-          </button>
-        ) : (
-          <button
-            className="mobile-menu-button"
-            type="button"
-            aria-label="Buka navigasi"
-            aria-controls="site-sidebar"
-            aria-expanded="false"
-            onClick={() => setIsOpen(true)}
-          >
-            <Menu aria-hidden="true" size={21} />
-          </button>
-        )}
+        <button
+          className="mobile-menu-button"
+          type="button"
+          aria-label={isOpen ? "Tutup navigasi" : "Buka navigasi"}
+          aria-controls="site-sidebar"
+          aria-expanded={isOpen}
+          onClick={() => setIsOpen((prev) => !prev)}
+        >
+          {isOpen ? <X aria-hidden="true" size={21} /> : <Menu aria-hidden="true" size={21} />}
+        </button>
 
         <Link className="mobile-topbar-brand" href="/home" onClick={closeMenu}>
           <span>{BUSINESS_NAME}</span>

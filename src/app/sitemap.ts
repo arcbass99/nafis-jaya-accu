@@ -3,9 +3,10 @@ import { SITE_URL } from "@/lib/seo";
 
 const routes = [
   { path: "", priority: 1, changeFrequency: "weekly" },
-  { path: "/pesan-aki", priority: 0.94, changeFrequency: "weekly" },
-  { path: "/layanan", priority: 0.86, changeFrequency: "monthly" },
-  { path: "/lokasi", priority: 0.84, changeFrequency: "monthly" },
+  { path: "/home", priority: 0.95, changeFrequency: "weekly" },
+  { path: "/home/pesan-aki", priority: 0.90, changeFrequency: "weekly" },
+  { path: "/home/layanan", priority: 0.85, changeFrequency: "monthly" },
+  { path: "/home/lokasi", priority: 0.85, changeFrequency: "monthly" },
 ] as const;
 
 export default function sitemap(): MetadataRoute.Sitemap {

@@ -97,7 +97,10 @@ export default function BatterySearch() {
     const normalizedQuery = normalizeText(query);
     return batteries.filter((item) => {
       const matchesFilter =
-        activeFilter === "all" || item.vehicleType === activeFilter || item.technology === activeFilter;
+        activeFilter === "all" ||
+        item.vehicleType === activeFilter ||
+        item.technology === activeFilter ||
+        (activeFilter === "maintenance-free" && item.technology === "motorcycle-mf");
       const matchesQuery = !normalizedQuery || getSearchableText(item).includes(normalizedQuery);
       return matchesFilter && matchesQuery;
     });
