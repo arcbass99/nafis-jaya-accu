@@ -223,15 +223,15 @@ export default function BatterySearch() {
                     <div className="battery-card-topline">
                       {item.isPopular ? (
                         <span className="popular-badge">
-                          <Sparkles size={13} aria-hidden="true" />
-                          Sering dicari
+                          <Sparkles size={11} aria-hidden="true" />
+                          Populer
                         </span>
                       ) : (
                         <span className="catalog-badge">Panduan</span>
                       )}
                       {isSelected ? (
                         <span className="selected-badge">
-                          <CheckCircle2 size={13} aria-hidden="true" />
+                          <CheckCircle2 size={11} aria-hidden="true" />
                           Dipilih
                         </span>
                       ) : null}
@@ -242,25 +242,20 @@ export default function BatterySearch() {
                         <h3>{item.code}</h3>
                         <p>{item.capacity}</p>
                       </div>
-                      <span>{item.typeLabel}</span>
-                    </div>
-
-                    <div className="battery-card-tags" aria-label="Kategori aki">
-                      <span>{item.categoryLabel}</span>
-                      <span>{item.typeLabel}</span>
+                      <span className="battery-tech-tag">{item.typeLabel}</span>
                     </div>
 
                     <p className="battery-fit">
-                      <strong>Umumnya untuk:</strong> {item.commonVehicles.join(", ")}
+                      <strong>Untuk:</strong> {item.commonVehicles.join(", ")}
                     </p>
-                    {item.note ? <p className="battery-note">{item.note}</p> : null}
+
                     <button
                       className="battery-select"
                       type="button"
                       aria-pressed={isSelected}
                       onClick={() => toggleItem(item.id)}
                     >
-                      {isSelected ? "Hapus dari Ringkasan" : "Pilih Aki"}
+                      {isSelected ? "Hapus" : "+ Pilih"}
                     </button>
                   </article>
                 );

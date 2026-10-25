@@ -8,60 +8,45 @@ export default function NotFound() {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      padding: '2rem',
+      padding: '1.5rem',
       textAlign: 'center',
-      background: 'var(--bg, #07090d)',
-      color: 'var(--text, #f7fbff)',
+      background: 'var(--bg)',
+      color: 'var(--text)',
       position: 'relative',
       overflow: 'hidden',
       fontFamily: 'inherit'
     }}>
       {/* Ambient Orbs */}
-      <div style={{ position: 'absolute', width: '50vw', height: '50vw', background: 'var(--cyan, #2fe3ff)', filter: 'blur(100px)', opacity: 0.08, top: '-10%', left: '-10%', borderRadius: '50%', zIndex: 0 }} />
-      <div style={{ position: 'absolute', width: '40vw', height: '40vw', background: 'var(--amber, #ffd166)', filter: 'blur(100px)', opacity: 0.06, bottom: '-10%', right: '-10%', borderRadius: '50%', zIndex: 0 }} />
+      <div style={{ position: 'absolute', width: '40vw', height: '40vw', background: 'rgba(56, 189, 248, 0.08)', filter: 'blur(90px)', top: '-10%', left: '-10%', borderRadius: '50%', zIndex: 0 }} />
+      <div style={{ position: 'absolute', width: '35vw', height: '35vw', background: 'rgba(251, 191, 36, 0.05)', filter: 'blur(90px)', bottom: '-10%', right: '-10%', borderRadius: '50%', zIndex: 0 }} />
 
       {/* Content */}
-      <div style={{ position: 'relative', zIndex: 1, maxWidth: '480px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1.5rem' }}>
+      <div style={{ position: 'relative', zIndex: 1, maxWidth: '420px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '1rem' }}>
         
         <div style={{
-          width: '72px',
-          height: '72px',
-          borderRadius: '20px',
-          background: 'rgba(255, 209, 102, 0.1)',
-          border: '1px solid rgba(255, 209, 102, 0.2)',
-          color: 'var(--amber, #ffd166)',
+          width: '60px',
+          height: '60px',
+          borderRadius: '16px',
+          background: 'var(--amber-soft)',
+          border: '1px solid rgba(251, 191, 36, 0.25)',
+          color: 'var(--amber)',
           display: 'flex',
           alignItems: 'center',
           justifyContent: 'center',
-          boxShadow: '0 0 40px rgba(255, 209, 102, 0.15)'
+          boxShadow: '0 4px 16px rgba(0, 0, 0, 0.4)'
         }}>
-          <Construction size={34} strokeWidth={1.5} />
+          <Construction size={28} strokeWidth={1.8} />
         </div>
 
-        <h1 style={{ fontSize: '1.875rem', fontWeight: 800, margin: 0, lineHeight: 1.2, letterSpacing: '-0.02em' }}>
+        <h1 style={{ fontSize: '1.5rem', fontWeight: 800, margin: 0, lineHeight: 1.25, letterSpacing: '-0.02em', color: 'var(--text)' }}>
           Ups! Tempatnya benar, tapi pintunya salah.
         </h1>
 
-        <p style={{ color: 'var(--muted, #a8b6c8)', fontSize: '0.9375rem', lineHeight: 1.6, margin: 0 }}>
+        <p style={{ color: 'var(--text-secondary)', fontSize: '0.875rem', lineHeight: 1.55, margin: 0 }}>
           Jalur link yang Anda lewati kemungkinan salah ketik, sudah tidak tersedia, atau telah dialihkan ke jalur utama.
         </p>
 
-        <Link href="/" style={{
-          marginTop: '1rem',
-          display: 'inline-flex',
-          alignItems: 'center',
-          justifyContent: 'center',
-          padding: '12px 24px',
-          background: 'var(--surface-soft, rgba(255,255,255,0.05))',
-          border: '1px solid var(--border, rgba(159, 220, 255, 0.16))',
-          borderRadius: '12px',
-          color: 'var(--cyan, #2fe3ff)',
-          textDecoration: 'none',
-          fontWeight: 600,
-          fontSize: '0.875rem',
-          transition: 'all 0.2s ease',
-          boxShadow: '0 8px 24px rgba(0,0,0,0.2)'
-        }}>
+        <Link href="/" className="btn btn-primary" style={{ marginTop: '0.5rem' }}>
           Kembali ke Halaman Utama
         </Link>
       </div>
