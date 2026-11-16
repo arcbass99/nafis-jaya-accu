@@ -1,6 +1,6 @@
 "use client";
 
-import { useState, useEffect, useRef } from "react";
+import { useState, useEffect } from "react";
 import Link from "next/link";
 import Image from "next/image";
 import dynamic from "next/dynamic";
@@ -8,10 +8,10 @@ import {
   Car, Bike, PackagePlus, ArrowRight, Home,
   Info, Plus, Minus, ShoppingCart, Zap, ChevronRight,
   Droplet, Cable, CircleDot, BatteryCharging,
-  Clock, CalendarCheck, Repeat2, SparklesIcon, Skull
+  Clock, Clock3, CalendarCheck, Repeat2, SparklesIcon, Skull
 } from "lucide-react";
 import { cn } from "@/lib/utils";
-import { WHATSAPP_NUMBER, GOOGLE_MAPS_URL } from "@/lib/constants";
+import { WHATSAPP_NUMBER, GOOGLE_MAPS_URL, STORE_HOURS } from "@/lib/constants";
 import "./InteractiveWizard.css";
 
 const GREETINGS = [
@@ -49,7 +49,7 @@ const STORE_ITEMS = [
   { id: "kabelAki" as const, label: "Kabel Aki", desc: "Jumper / penghubung", icon: Cable },
 ];
 
-type MainCategory = "pesan" | "setrum" | "perlengkapan" | null;
+type MainCategory = "pesan" | "setrum" | "perlengkapan";
 type VehicleType = "mobil" | "motor" | null;
 type BatteryType = "kering" | "basah" | null;
 type TradeIn = "ya" | "tidak" | null;
@@ -58,7 +58,7 @@ export default function InteractiveWizard() {
   const [greeting, setGreeting] = useState("");
   const [isLoaded, setIsLoaded] = useState(false);
 
-  const [mainCategory, setMainCategory] = useState<MainCategory>(null);
+  const [mainCategory, setMainCategory] = useState<MainCategory>("pesan");
   const [vehicleType, setVehicleType] = useState<VehicleType>(null);
   const [batteryType, setBatteryType] = useState<BatteryType>(null);
   const [tradeIn, setTradeIn] = useState<TradeIn>(null);
@@ -74,8 +74,6 @@ export default function InteractiveWizard() {
     kabelAki: 0,
   });
 
-  const flowRef = useRef<HTMLDivElement>(null);
-
   useEffect(() => {
     const timer = setTimeout(() => {
       setGreeting(GREETINGS[Math.floor(Math.random() * GREETINGS.length)]);
@@ -83,14 +81,6 @@ export default function InteractiveWizard() {
     }, 0);
     return () => clearTimeout(timer);
   }, []);
-
-  useEffect(() => {
-    if (mainCategory && flowRef.current) {
-      setTimeout(() => {
-        flowRef.current?.scrollIntoView({ behavior: "smooth", block: "nearest" });
-      }, 100);
-    }
-  }, [mainCategory]);
 
   const handleCartChange = (item: keyof typeof cart, delta: number) => {
     setCart((prev) => ({
@@ -124,8 +114,8 @@ export default function InteractiveWizard() {
   };
 
   const isCartEmpty = cartTotal === 0;
-  const canSubmitPesan = vehicleType && batteryType && tradeIn && vehicleName.trim() !== "";
-  const canSubmitSetrum = vehicleType && dropTime.trim() !== "" && pickupTime.trim() !== "";
+  const canSubmitPesan = Boolean(vehicleType && batteryType && tradeIn && vehicleName.trim() !== "");
+  const canSubmitSetrum = Boolean(vehicleType && dropTime.trim() !== "" && pickupTime.trim() !== "");
 
   const stepNumber = (n: number) => (
     <span className="wz-step-number">{n}</span>
@@ -144,18 +134,19 @@ export default function InteractiveWizard() {
         {/* ===== TOP BAR ===== */}
         <header className="wz-topbar">
           <div className="wz-logo">
-            <BatteryCharging size={18} strokeWidth={2.5} />
+            <BatteryCharging size={18} strokeWidth={2.5} aria-hidden="true" />
             <span>Nafis Jaya Accu</span>
           </div>
-          <Link href="/home" className="wz-home-link">
-            <Home size={14} />
-            <span>Masuk ke Halaman Utama</span>
+          <Link href="/home" className="wz-home-link" aria-label="Masuk ke Halaman Utama">
+            <Home size={14} aria-hidden="true" />
+            <span className="wz-home-link-full">Masuk ke Halaman Utama</span>
+            <span className="wz-home-link-short">Halaman Utama</span>
           </Link>
         </header>
 
-        {/* ===== TWO COLUMN BODY ===== */}
+        {/* ===== RESPONSIVE BODY (Desktop 2-col / Mobile stacked: Tabs -> Form -> Location) ===== */}
         <div className="wz-body">
-          {/* ---- LEFT: Greeting + Category Picker ---- */}
+          {/* ---- LEFT / TOP: Greeting + Category Picker ---- */}
           <aside className="wz-left">
             <div className="wz-left-inner">
               <h1 className="wz-greeting">
@@ -164,7 +155,7 @@ export default function InteractiveWizard() {
 
               <div className="wz-section">
                 <p className="wz-label">Pilih kebutuhan Anda</p>
-                <div className="wz-categories">
+                <div className="wz-categories" role="tablist" aria-label="Pilih kebutuhan">
                   {([
                     { id: "pesan" as const, label: "Pesan Aki", sub: "Beli baru / tukar tambah", icon: ShoppingCart, accent: "cyan" },
                     { id: "setrum" as const, label: "Setrum Aki", sub: "Booking cas / charge", icon: Zap, accent: "amber" },
@@ -175,63 +166,46 @@ export default function InteractiveWizard() {
                     return (
                       <button
                         key={cat.id}
+                        type="button"
+                        role="tab"
+                        aria-selected={active}
                         onClick={() => setMainCategory(cat.id)}
                         className={cn("wz-cat-btn", `accent-${cat.accent}`, active && "is-active")}
                       >
                         <span className="wz-cat-icon">
-                          <Icon size={22} strokeWidth={active ? 2.5 : 1.8} />
+                          <Icon size={20} strokeWidth={active ? 2.5 : 1.8} aria-hidden="true" />
                         </span>
                         <span className="wz-cat-text">
                           <strong>{cat.label}</strong>
                           <small>{cat.sub}</small>
                         </span>
-                        <ChevronRight size={16} className="wz-cat-arrow" />
+                        <ChevronRight size={16} className="wz-cat-arrow" aria-hidden="true" />
                       </button>
                     );
                   })}
                 </div>
               </div>
-
-              {/* Mini Map */}
-              <div className="wz-mini-map-wrap">
-                <p className="wz-label">Lokasi Toko</p>
-                <div className="wz-mini-map-container">
-                  <LeafletMap />
-                </div>
-                <a href={GOOGLE_MAPS_URL} target="_blank" rel="noreferrer" className="wz-mini-map-btn">
-                  Buka di Google Maps <ChevronRight size={14} />
-                </a>
-              </div>
             </div>
           </aside>
 
-          {/* ---- RIGHT: Flow Form ---- */}
-          <section className={cn("wz-right", mainCategory && "has-flow")}>
-            {!mainCategory && (
-              <div className="wz-empty-state">
-                <div className="wz-empty-icon" aria-hidden="true">
-                  <BatteryCharging size={32} strokeWidth={1.2} />
-                </div>
-                <p>Pilih salah satu kebutuhan di sebelah kiri untuk memulai.</p>
-              </div>
-            )}
-
+          {/* ---- RIGHT / MIDDLE: Active Flow Form ---- */}
+          <section className="wz-right" aria-live="polite">
             {/* ========== PESAN AKI ========== */}
             {mainCategory === "pesan" && (
-              <div className="wz-flow" ref={flowRef} key="pesan">
+              <div className="wz-flow" key="pesan">
                 <div className="wz-flow-header accent-cyan">
-                  <ShoppingCart size={16} />
+                  <ShoppingCart size={16} aria-hidden="true" />
                   <span>Pesan Aki</span>
                 </div>
 
                 <div className="wz-section">
                   <p className="wz-label">{stepNumber(1)} Untuk kendaraan apa?</p>
                   <div className="wz-pair">
-                    <button onClick={() => setVehicleType("mobil")} className={cn("wz-choice", vehicleType === "mobil" && "is-on")}>
-                      <Car size={20} strokeWidth={1.6} /> <span>Mobil</span>
+                    <button type="button" aria-pressed={vehicleType === "mobil"} onClick={() => setVehicleType("mobil")} className={cn("wz-choice", vehicleType === "mobil" && "is-on")}>
+                      <Car size={20} strokeWidth={1.6} aria-hidden="true" /> <span>Mobil</span>
                     </button>
-                    <button onClick={() => setVehicleType("motor")} className={cn("wz-choice", vehicleType === "motor" && "is-on")}>
-                      <Bike size={20} strokeWidth={1.6} /> <span>Motor</span>
+                    <button type="button" aria-pressed={vehicleType === "motor"} onClick={() => setVehicleType("motor")} className={cn("wz-choice", vehicleType === "motor" && "is-on")}>
+                      <Bike size={20} strokeWidth={1.6} aria-hidden="true" /> <span>Motor</span>
                     </button>
                   </div>
                 </div>
@@ -240,16 +214,16 @@ export default function InteractiveWizard() {
                   <div className="wz-section wz-reveal">
                     <p className="wz-label">{stepNumber(2)} Pilih tipe aki</p>
                     <div className="wz-pair">
-                      <button onClick={() => setBatteryType("kering")} className={cn("wz-choice", batteryType === "kering" && "is-on")}>
-                        <span>🔋</span> <span>Kering</span>
+                      <button type="button" aria-pressed={batteryType === "kering"} onClick={() => setBatteryType("kering")} className={cn("wz-choice", batteryType === "kering" && "is-on")}>
+                        <span aria-hidden="true">🔋</span> <span>Kering</span>
                       </button>
-                      <button onClick={() => setBatteryType("basah")} className={cn("wz-choice", batteryType === "basah" && "is-on")}>
-                        <span>🪫</span> <span>Basah</span>
+                      <button type="button" aria-pressed={batteryType === "basah"} onClick={() => setBatteryType("basah")} className={cn("wz-choice", batteryType === "basah" && "is-on")}>
+                        <span aria-hidden="true">🪫</span> <span>Basah</span>
                       </button>
                     </div>
                     {batteryType && (
                       <div className={cn("wz-info-card wz-reveal", batteryType === "kering" ? "accent-cyan" : "accent-amber")}>
-                        <Info size={15} />
+                        <Info size={15} aria-hidden="true" />
                         <div>
                           <strong>{batteryType === "kering" ? "Aki Kering (Maintenance Free)" : "Aki Basah (Konvensional)"}</strong>
                           <p>{batteryType === "kering"
@@ -265,11 +239,11 @@ export default function InteractiveWizard() {
                   <div className="wz-section wz-reveal">
                     <p className="wz-label">{stepNumber(3)} Tukar tambah aki lama?</p>
                     <div className="wz-pair">
-                      <button onClick={() => setTradeIn("ya")} className={cn("wz-choice", tradeIn === "ya" && "is-on")}>
-                        <Repeat2 size={18} strokeWidth={1.6} /> <span>Ya, Tukar Tambah</span>
+                      <button type="button" aria-pressed={tradeIn === "ya"} onClick={() => setTradeIn("ya")} className={cn("wz-choice", tradeIn === "ya" && "is-on")}>
+                        <Repeat2 size={18} strokeWidth={1.6} aria-hidden="true" /> <span>Ya, Tukar Tambah</span>
                       </button>
-                      <button onClick={() => setTradeIn("tidak")} className={cn("wz-choice", tradeIn === "tidak" && "is-on")}>
-                        <SparklesIcon size={18} strokeWidth={1.6} /> <span>Beli Baru</span>
+                      <button type="button" aria-pressed={tradeIn === "tidak"} onClick={() => setTradeIn("tidak")} className={cn("wz-choice", tradeIn === "tidak" && "is-on")}>
+                        <SparklesIcon size={18} strokeWidth={1.6} aria-hidden="true" /> <span>Beli Baru</span>
                       </button>
                     </div>
                   </div>
@@ -278,15 +252,22 @@ export default function InteractiveWizard() {
                 {vehicleType && batteryType && tradeIn && (
                   <div className="wz-section wz-reveal">
                     <p className="wz-label">{stepNumber(4)} Kendaraan Anda</p>
-                    <input type="text" className="wz-input" placeholder="Contoh: Avanza 2018 / Honda Beat 2020" value={vehicleName} onChange={(e) => setVehicleName(e.target.value)} />
+                    <input type="text" className="wz-input" aria-label="Nama atau tipe kendaraan Anda" placeholder="Contoh: Avanza 2018 / Honda Beat 2020" value={vehicleName} onChange={(e) => setVehicleName(e.target.value)} />
                   </div>
                 )}
 
                 <div className={cn("wz-submit-area", canSubmitPesan && "is-ready")}>
-                  <a href={canSubmitPesan ? getWhatsappUrl() : undefined} target="_blank" rel="noreferrer" className="wz-submit-btn">
+                  <a
+                    href={canSubmitPesan ? getWhatsappUrl() : undefined}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="wz-submit-btn"
+                    aria-disabled={!canSubmitPesan}
+                    tabIndex={canSubmitPesan ? undefined : -1}
+                  >
                     <Image src="/whatsapp-icon.svg" alt="" width={20} height={20} aria-hidden="true" />
                     Kirim Pesanan via WhatsApp
-                    <ArrowRight size={16} />
+                    <ArrowRight size={16} aria-hidden="true" />
                   </a>
                 </div>
 
@@ -296,27 +277,27 @@ export default function InteractiveWizard() {
                   <span className="wz-alt-line" />
                 </div>
                 <Link href="/home/pesan-aki" className="wz-alt-link">
-                  Lihat Katalog Aki Lengkap <ChevronRight size={15} />
+                  Lihat Katalog Aki Lengkap <ChevronRight size={15} aria-hidden="true" />
                 </Link>
               </div>
             )}
 
             {/* ========== SETRUM AKI ========== */}
             {mainCategory === "setrum" && (
-              <div className="wz-flow" ref={flowRef} key="setrum">
+              <div className="wz-flow" key="setrum">
                 <div className="wz-flow-header accent-amber">
-                  <Zap size={16} />
+                  <Zap size={16} aria-hidden="true" />
                   <span>Setrum / Cas Aki</span>
                 </div>
 
                 <div className="wz-section">
                   <p className="wz-label">{stepNumber(1)} Aki kendaraan apa?</p>
                   <div className="wz-pair">
-                    <button onClick={() => setVehicleType("mobil")} className={cn("wz-choice", vehicleType === "mobil" && "is-on")}>
-                      <Car size={20} strokeWidth={1.6} /> <span>Mobil</span>
+                    <button type="button" aria-pressed={vehicleType === "mobil"} onClick={() => setVehicleType("mobil")} className={cn("wz-choice", vehicleType === "mobil" && "is-on")}>
+                      <Car size={20} strokeWidth={1.6} aria-hidden="true" /> <span>Mobil</span>
                     </button>
-                    <button onClick={() => setVehicleType("motor")} className={cn("wz-choice", vehicleType === "motor" && "is-on")}>
-                      <Bike size={20} strokeWidth={1.6} /> <span>Motor</span>
+                    <button type="button" aria-pressed={vehicleType === "motor"} onClick={() => setVehicleType("motor")} className={cn("wz-choice", vehicleType === "motor" && "is-on")}>
+                      <Bike size={20} strokeWidth={1.6} aria-hidden="true" /> <span>Motor</span>
                     </button>
                   </div>
                 </div>
@@ -326,25 +307,32 @@ export default function InteractiveWizard() {
                     <div className="wz-section wz-reveal">
                       <p className="wz-label">{stepNumber(2)} Rencana datang jam berapa?</p>
                       <div className="wz-input-wrap">
-                        <Clock size={16} className="wz-input-icon" />
-                        <input type="text" className="wz-input has-icon" placeholder="Contoh: Jam 10 pagi, Nanti sore" value={dropTime} onChange={(e) => setDropTime(e.target.value)} />
+                        <Clock size={16} className="wz-input-icon" aria-hidden="true" />
+                        <input type="text" className="wz-input has-icon" aria-label="Rencana datang jam berapa" placeholder="Contoh: Jam 10 pagi, Nanti sore" value={dropTime} onChange={(e) => setDropTime(e.target.value)} />
                       </div>
                     </div>
                     <div className="wz-section wz-reveal">
                       <p className="wz-label">{stepNumber(3)} Rencana diambil kapan?</p>
                       <div className="wz-input-wrap">
-                        <CalendarCheck size={16} className="wz-input-icon" />
-                        <input type="text" className="wz-input has-icon" placeholder="Contoh: Besok pagi, Nanti malam" value={pickupTime} onChange={(e) => setPickupTime(e.target.value)} />
+                        <CalendarCheck size={16} className="wz-input-icon" aria-hidden="true" />
+                        <input type="text" className="wz-input has-icon" aria-label="Rencana diambil kapan" placeholder="Contoh: Besok pagi, Nanti malam" value={pickupTime} onChange={(e) => setPickupTime(e.target.value)} />
                       </div>
                     </div>
                   </>
                 )}
 
                 <div className={cn("wz-submit-area", canSubmitSetrum && "is-ready")}>
-                  <a href={canSubmitSetrum ? getWhatsappUrl() : undefined} target="_blank" rel="noreferrer" className="wz-submit-btn">
+                  <a
+                    href={canSubmitSetrum ? getWhatsappUrl() : undefined}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="wz-submit-btn"
+                    aria-disabled={!canSubmitSetrum}
+                    tabIndex={canSubmitSetrum ? undefined : -1}
+                  >
                     <Image src="/whatsapp-icon.svg" alt="" width={20} height={20} aria-hidden="true" />
                     Booking Setrum via WhatsApp
-                    <ArrowRight size={16} />
+                    <ArrowRight size={16} aria-hidden="true" />
                   </a>
                 </div>
               </div>
@@ -352,9 +340,9 @@ export default function InteractiveWizard() {
 
             {/* ========== PERLENGKAPAN ========== */}
             {mainCategory === "perlengkapan" && (
-              <div className="wz-flow" ref={flowRef} key="perlengkapan">
+              <div className="wz-flow" key="perlengkapan">
                 <div className="wz-flow-header accent-green">
-                  <PackagePlus size={16} />
+                  <PackagePlus size={16} aria-hidden="true" />
                   <span>Perlengkapan Aki</span>
                 </div>
 
@@ -367,19 +355,19 @@ export default function InteractiveWizard() {
                       return (
                         <div className={cn("wz-store-row", qty > 0 && "has-qty", item.danger && "is-danger")} key={item.id}>
                           <div className="wz-store-info">
-                            <span className="wz-store-icon"><Icon size={18} strokeWidth={1.5} /></span>
+                            <span className="wz-store-icon"><Icon size={18} strokeWidth={1.5} aria-hidden="true" /></span>
                             <div>
                               <strong>{item.label}</strong>
                               <small>{item.desc}</small>
                             </div>
                           </div>
                           <div className="wz-qty">
-                            <button onClick={() => handleCartChange(item.id, -1)} className="wz-qty-btn" disabled={qty === 0} aria-label={`Kurangi ${item.label}`}>
-                              <Minus size={14} />
+                            <button type="button" onClick={() => handleCartChange(item.id, -1)} className="wz-qty-btn" disabled={qty === 0} aria-label={`Kurangi ${item.label}`}>
+                              <Minus size={14} aria-hidden="true" />
                             </button>
                             <span className="wz-qty-num">{qty}</span>
-                            <button onClick={() => handleCartChange(item.id, 1)} className="wz-qty-btn" aria-label={`Tambah ${item.label}`}>
-                              <Plus size={14} />
+                            <button type="button" onClick={() => handleCartChange(item.id, 1)} className="wz-qty-btn" aria-label={`Tambah ${item.label}`}>
+                              <Plus size={14} aria-hidden="true" />
                             </button>
                           </div>
                         </div>
@@ -389,22 +377,46 @@ export default function InteractiveWizard() {
 
                   {!isCartEmpty && (
                     <div className="wz-cart-summary wz-reveal">
-                      <ShoppingCart size={14} />
+                      <ShoppingCart size={14} aria-hidden="true" />
                       <span>{cartTotal} item dipilih</span>
                     </div>
                   )}
                 </div>
 
                 <div className={cn("wz-submit-area", !isCartEmpty && "is-ready")}>
-                  <a href={!isCartEmpty ? getWhatsappUrl() : undefined} target="_blank" rel="noreferrer" className="wz-submit-btn">
+                  <a
+                    href={!isCartEmpty ? getWhatsappUrl() : undefined}
+                    target="_blank"
+                    rel="noreferrer"
+                    className="wz-submit-btn"
+                    aria-disabled={isCartEmpty}
+                    tabIndex={!isCartEmpty ? undefined : -1}
+                  >
                     <Image src="/whatsapp-icon.svg" alt="" width={20} height={20} aria-hidden="true" />
                     Beli Perlengkapan via WhatsApp
-                    <ArrowRight size={16} />
+                    <ArrowRight size={16} aria-hidden="true" />
                   </a>
                 </div>
               </div>
             )}
           </section>
+
+          {/* ---- LEFT-BOTTOM (Desktop) / BOTTOM (Mobile): Store Location ---- */}
+          <aside className="wz-location" aria-label="Lokasi toko">
+            <div className="wz-location-head">
+              <p className="wz-label">Lokasi Toko</p>
+              <span className="wz-hours-badge">
+                <Clock3 size={11} aria-hidden="true" />
+                Buka {STORE_HOURS}
+              </span>
+            </div>
+            <div className="wz-mini-map-container">
+              <LeafletMap />
+            </div>
+            <a href={GOOGLE_MAPS_URL} target="_blank" rel="noreferrer" className="wz-mini-map-btn">
+              Buka di Google Maps <ChevronRight size={14} aria-hidden="true" />
+            </a>
+          </aside>
         </div>
       </div>
     </div>
