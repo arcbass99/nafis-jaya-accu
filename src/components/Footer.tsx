@@ -4,7 +4,6 @@ import {
   BUSINESS_NAME,
   GOOGLE_MAPS_URL,
   INSTAGRAM_URL,
-  navItems,
   SERVICE_AREA,
   STORE_HOURS,
   WHATSAPP_URL,
@@ -16,7 +15,7 @@ export default function Footer() {
       <div className="footer-grid phi-grid">
         <div className="footer-brand">
           <div className="footer-icon" aria-hidden="true">
-            <BatteryCharging size={24} />
+            <BatteryCharging size={20} />
           </div>
           <h2>{BUSINESS_NAME}</h2>
           <p>
@@ -25,14 +24,6 @@ export default function Footer() {
         </div>
 
         <div className="footer-links">
-          <div>
-            <h3>Navigasi</h3>
-            {navItems.map((item) => (
-              <Link key={item.href} href={item.href}>
-                {item.label}
-              </Link>
-            ))}
-          </div>
           <div>
             <h3>Kontak Cepat</h3>
             <Link href="/">Mode Akses Cepat</Link>

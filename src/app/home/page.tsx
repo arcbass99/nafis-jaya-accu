@@ -2,6 +2,7 @@ import AppShell from "@/components/AppShell";
 import FAQSection from "@/components/FAQSection";
 import Footer from "@/components/Footer";
 import HeroSection from "@/components/HeroSection";
+import HomeHighlights from "@/components/HomeHighlights";
 import { createPageMetadata, pageDescriptions } from "@/lib/seo";
 
 export const metadata = createPageMetadata({
@@ -22,6 +23,7 @@ export default function Home() {
   return (
     <AppShell>
       <HeroSection />
+      <HomeHighlights />
       <FAQSection />
       <Footer />
     </AppShell>

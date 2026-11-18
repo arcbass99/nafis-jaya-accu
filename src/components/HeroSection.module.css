@@ -1,5 +1,6 @@
 .visualPanel {
   position: relative;
+  isolation: isolate;
   display: grid;
   min-width: 0;
   place-items: center;
@@ -23,8 +24,10 @@
 
 @media (max-width: 980px) {
   .visualPanel {
-    min-height: 14rem;
-    padding-top: 0.5rem;
+    order: -1;
+    min-height: 9.5rem;
+    margin-top: -0.35rem;
+    padding: 0;
   }
 
   .visualPanel::before {

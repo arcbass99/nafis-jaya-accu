@@ -2,7 +2,7 @@
   position: relative;
   isolation: isolate;
   display: grid;
-  width: min(100%, clamp(14rem, 28vw, 22rem));
+  width: min(100%, clamp(13rem, 20vw, 16.5rem));
   aspect-ratio: 1 / 1;
   place-items: center;
   overflow: visible;
@@ -137,7 +137,7 @@
 
 @media (max-width: 980px) {
   .root {
-    width: min(100%, 17rem);
+    width: min(100%, 13rem);
     margin-inline: auto;
   }
 
@@ -162,7 +162,7 @@
 
 @media (max-width: 520px) {
   .root {
-    width: min(100%, 14rem);
+    width: min(100%, 10.5rem);
   }
 
   .halo {

@@ -1,6 +1,6 @@
 "use client";
 
-import { CircleHelp } from "lucide-react";
+import { ChevronDown, CircleHelp } from "lucide-react";
 import { useState } from "react";
 import { faqs } from "@/data/faq";
 
@@ -27,19 +27,17 @@ export default function FAQSection() {
           const isOpen = openIndex === index;
           return (
             <div className={`faq-item glass-card ${isOpen ? "is-open" : ""}`} key={faq.question}>
-              <button 
+              <button
+                type="button"
                 className="faq-summary"
                 onClick={() => setOpenIndex(isOpen ? null : index)}
                 aria-expanded={isOpen}
               >
-                {faq.question}
+                <span>{faq.question}</span>
+                <ChevronDown size={16} className="faq-chevron" aria-hidden="true" />
               </button>
-              <div className="faq-content-wrapper" style={{ 
-                display: "grid", 
-                gridTemplateRows: isOpen ? "1fr" : "0fr",
-                transition: "grid-template-rows 300ms ease"
-              }}>
-                <div style={{ overflow: "hidden" }}>
+              <div className="faq-content-wrapper">
+                <div className="faq-content-inner">
                   <p className="faq-content">{faq.answer}</p>
                 </div>
               </div>

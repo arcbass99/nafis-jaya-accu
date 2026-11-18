@@ -28,6 +28,23 @@ export type BatteryFilter =
   | "maintenance-free"
   | "vrla";
 
+export type BatteryVehicleFilter = "all" | "car" | "motorcycle" | "vrla";
+
+export type BatteryTechFilter = "all" | "mf" | "dry-charge";
+
+export type BatterySortOption =
+  | "relevance"
+  | "popular"
+  | "capacity-asc"
+  | "capacity-desc"
+  | "code-asc";
+
+export interface BatterySearchFilters {
+  vehicle: BatteryVehicleFilter;
+  tech: BatteryTechFilter;
+  onlyPopular: boolean;
+}
+
 export interface OrderContext {
   vehicle: string;
   need: string;

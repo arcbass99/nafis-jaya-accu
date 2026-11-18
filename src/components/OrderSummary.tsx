@@ -1,7 +1,7 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useCallback, useEffect, useRef, useState } from "react";
 import { AlertCircle, CheckCircle2, MapPin, ShoppingCart, Trash2, X } from "lucide-react";
 import { WHATSAPP_URL } from "@/lib/constants";
 import { buildWhatsAppUrl } from "@/lib/whatsapp";
@@ -13,7 +13,10 @@ interface OrderSummaryProps {
   context: OrderContext;
   onContextChange: (context: OrderContext) => void;
   onRemoveItem: (id: string) => void;
+  onClearItems?: () => void;
   needOptions: readonly string[];
+  isOpen?: boolean;
+  onOpenChange?: (open: boolean) => void;
 }
 
 export default function OrderSummary({
@@ -21,9 +24,75 @@ export default function OrderSummary({
   context,
   onContextChange,
   onRemoveItem,
+  onClearItems,
   needOptions,
+  isOpen,
+  onOpenChange,
 }: OrderSummaryProps) {
-  const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [uncontrolledOpen, setUncontrolledOpen] = useState(false);
+  const triggerRef = useRef<HTMLButtonElement | null>(null);
+  const closeButtonRef = useRef<HTMLButtonElement | null>(null);
+  const openerRef = useRef<HTMLElement | null>(null);
+  const wasOpenRef = useRef(false);
+
+  const isControlled = isOpen !== undefined;
+  const open = isControlled ? isOpen : uncontrolledOpen;
+  const setOpen = useCallback(
+    (next: boolean) => {
+      if (!isControlled) {
+        setUncontrolledOpen(next);
+      }
+      onOpenChange?.(next);
+    },
+    [isControlled, onOpenChange],
+  );
+
+  const restoreFocus = useCallback(() => {
+    const opener = openerRef.current;
+    openerRef.current = null;
+    if (opener && opener.isConnected && opener !== document.body) {
+      opener.focus();
+      return;
+    }
+    triggerRef.current?.focus();
+  }, []);
+
+  const closeAndRestoreFocus = useCallback(() => {
+    setOpen(false);
+    restoreFocus();
+  }, [restoreFocus, setOpen]);
+
+  useEffect(() => {
+    let rafId: number | undefined;
+
+    if (open && !wasOpenRef.current) {
+      openerRef.current =
+        document.activeElement instanceof HTMLElement ? document.activeElement : null;
+      rafId = window.requestAnimationFrame(() => {
+        closeButtonRef.current?.focus();
+      });
+    }
+
+    wasOpenRef.current = open;
+    return () => {
+      if (rafId !== undefined) {
+        window.cancelAnimationFrame(rafId);
+      }
+    };
+  }, [open]);
+
+  useEffect(() => {
+    if (!open) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        closeAndRestoreFocus();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [open, closeAndRestoreFocus]);
 
   const hasContext = Boolean(context.vehicle.trim() || context.need.trim() || context.location.trim());
   const canSendDetailedMessage = selectedItems.length > 0 || hasContext;
@@ -35,34 +104,40 @@ export default function OrderSummary({
 
   return (
     <>
-      {/* Floating Action Button on Mobile */}
+      {/* Universal Floating Cart Pill Button (Desktop & Mobile) */}
       <button
-        className="mobile-floating-cart"
+        ref={triggerRef}
+        className={cn("floating-cart-btn", selectedItems.length > 0 && "has-items")}
         type="button"
-        onClick={() => setIsMobileOpen(true)}
+        aria-expanded={open}
+        aria-controls="order-summary-drawer"
+        onClick={() => setOpen(true)}
         aria-label={`Buka ringkasan pesanan (${selectedItems.length} aki dipilih)`}
       >
         <div className="cart-badge-wrap">
-          <ShoppingCart size={17} />
+          <ShoppingCart size={17} aria-hidden="true" />
           {selectedItems.length > 0 && (
             <span className="cart-badge-count">{selectedItems.length}</span>
           )}
         </div>
         <span className="floating-cart-label">
-          {selectedItems.length > 0 ? `${selectedItems.length} Aki Dipilih` : "Ringkasan WA"}
+          {selectedItems.length > 0 ? `${selectedItems.length} Aki • Lanjut WA` : "Ringkasan WA"}
         </span>
       </button>
 
-      {/* Mobile Drawer Backdrop */}
+      {/* Drawer Backdrop */}
       <div
-        className={cn("summary-backdrop", isMobileOpen && "is-visible")}
-        onClick={() => setIsMobileOpen(false)}
+        className={cn("summary-backdrop", open && "is-visible")}
+        onClick={closeAndRestoreFocus}
         aria-hidden="true"
       />
 
-      {/* Order Summary Panel (Desktop sticky / Mobile bottom sheet) */}
+      {/* Order Summary Drawer (Desktop Right Slide-Over / Mobile Bottom Sheet) */}
       <aside
-        className={cn("order-summary glass-panel", isMobileOpen && "is-mobile-open")}
+        id="order-summary-drawer"
+        className={cn("order-summary glass-panel", open && "is-open")}
+        role="dialog"
+        aria-modal={open ? "true" : undefined}
         aria-labelledby="order-summary-title"
       >
         <div className="summary-heading">
@@ -75,12 +150,13 @@ export default function OrderSummary({
               {selectedItems.length}
             </span>
             <button
-              className="summary-close-mobile"
+              ref={closeButtonRef}
+              className="summary-close"
               type="button"
-              onClick={() => setIsMobileOpen(false)}
+              onClick={closeAndRestoreFocus}
               aria-label="Tutup ringkasan"
             >
-              <X size={17} />
+              <X size={17} aria-hidden="true" />
             </button>
           </div>
         </div>
@@ -91,16 +167,24 @@ export default function OrderSummary({
             <p>Belum ada aki yang dipilih. Isi kendaraan atau lokasi dulu jika ingin konsultasi tanpa memilih tipe aki.</p>
           </div>
         ) : (
-          <ul className="summary-list" aria-label="Aki yang dipilih">
-            {selectedItems.map((item) => (
-              <li key={item.id}>
-                <span>{formatBatteryLine(item)}</span>
-                <button type="button" aria-label={`Hapus ${item.code}`} onClick={() => onRemoveItem(item.id)}>
-                  <Trash2 size={14} aria-hidden="true" />
-                </button>
-              </li>
-            ))}
-          </ul>
+          <div className="summary-selected-block">
+            <div className="summary-list-head">
+              <span>Aki dipilih</span>
+              {onClearItems ? (
+                <button type="button" className="summary-clear-btn" onClick={onClearItems}>Kosongkan</button>
+              ) : null}
+            </div>
+            <ul className="summary-list" aria-label="Aki yang dipilih">
+              {selectedItems.map((item) => (
+                <li key={item.id}>
+                  <span>{formatBatteryLine(item)}</span>
+                  <button type="button" aria-label={`Hapus ${item.code}`} onClick={() => onRemoveItem(item.id)}>
+                    <Trash2 size={14} aria-hidden="true" />
+                  </button>
+                </li>
+              ))}
+            </ul>
+          </div>
         )}
 
         <div className="summary-assurance" aria-label="Jaminan alur konsultasi">

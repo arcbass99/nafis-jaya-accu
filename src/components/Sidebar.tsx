@@ -3,8 +3,8 @@
 import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
-import { BatteryCharging, Clock3, Home, Menu, MapPin, Search, Wrench, X, Sparkles } from "lucide-react";
-import { useEffect, useState } from "react";
+import { BatteryCharging, Home, Menu, MapPin, Search, Wrench, X, Sparkles } from "lucide-react";
+import { type CSSProperties, useEffect, useRef, useState } from "react";
 import {
   BUSINESS_NAME,
   BUSINESS_TAGLINE,
@@ -14,6 +14,13 @@ import {
   WHATSAPP_URL,
 } from "@/lib/constants";
 import { cn } from "@/lib/utils";
+
+const navIconMap = {
+  "/home": Home,
+  "/home/pesan-aki": Search,
+  "/home/layanan": Wrench,
+  "/home/lokasi": MapPin,
+} as const;
 
 const mobileNavItems = [
   { href: "/home", label: "Home", icon: Home },
@@ -29,8 +36,16 @@ const isActivePath = (pathname: string, href: string) => {
 
 export default function Sidebar() {
   const pathname = usePathname();
-  const [isOpen, setIsOpen] = useState(false);
+  const [openForPath, setOpenForPath] = useState<string | null>(null);
   const [scrollProgress, setScrollProgress] = useState(0);
+  const menuButtonRef = useRef<HTMLButtonElement | null>(null);
+
+  const isOpen = openForPath === pathname;
+  const closeMenu = () => setOpenForPath(null);
+  const closeMenuAndRestoreFocus = () => {
+    setOpenForPath(null);
+    menuButtonRef.current?.focus();
+  };
 
   useEffect(() => {
     let ticking = false;
@@ -61,18 +76,33 @@ export default function Sidebar() {
     };
   }, []);
 
-  const closeMenu = () => setIsOpen(false);
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const handleKeyDown = (event: KeyboardEvent) => {
+      if (event.key === "Escape") {
+        setOpenForPath(null);
+        menuButtonRef.current?.focus();
+      }
+    };
+
+    window.addEventListener("keydown", handleKeyDown);
+    return () => window.removeEventListener("keydown", handleKeyDown);
+  }, [isOpen]);
+
+  const progressPercent = Math.round(scrollProgress * 100);
 
   return (
     <>
       <header className="mobile-topbar" aria-label="Navigasi utama">
         <button
+          ref={menuButtonRef}
           className="mobile-menu-button"
           type="button"
           aria-label={isOpen ? "Tutup navigasi" : "Buka navigasi"}
           aria-controls="site-sidebar"
           aria-expanded={isOpen}
-          onClick={() => setIsOpen((prev) => !prev)}
+          onClick={() => setOpenForPath((prev) => (prev === pathname ? null : pathname))}
         >
           {isOpen ? <X aria-hidden="true" size={21} /> : <Menu aria-hidden="true" size={21} />}
         </button>
@@ -90,49 +120,65 @@ export default function Sidebar() {
       <div
         className={cn("sidebar-backdrop", isOpen && "is-visible")}
         aria-hidden="true"
-        onClick={closeMenu}
+        onClick={closeMenuAndRestoreFocus}
       />
 
       <aside id="site-sidebar" className={cn("site-sidebar", isOpen && "is-open")} aria-label="Navigasi utama">
         <div className="sidebar-inner">
           <div className="sidebar-topline">
-            <div className="brand-mark" aria-hidden="true">
-              <BatteryCharging size={24} />
-            </div>
-            <button className="sidebar-close" type="button" aria-label="Tutup navigasi" onClick={closeMenu}>
+            <Link className="sidebar-brand" href="/home" onClick={closeMenu}>
+              <div className="brand-mark" aria-hidden="true">
+                <BatteryCharging size={19} />
+              </div>
+              <div className="sidebar-brand-copy">
+                <span>{BUSINESS_NAME}</span>
+                <small>{BUSINESS_TAGLINE}</small>
+              </div>
+            </Link>
+            <button className="sidebar-close" type="button" aria-label="Tutup navigasi" onClick={closeMenuAndRestoreFocus}>
               <X size={20} aria-hidden="true" />
             </button>
           </div>
 
-          <Link className="sidebar-brand" href="/home" onClick={closeMenu}>
-            <span>{BUSINESS_NAME}</span>
-            <small>{BUSINESS_TAGLINE}</small>
-          </Link>
-
-          <progress
-            className="battery-progress"
-            max={100}
-            value={Math.round(scrollProgress * 100)}
-            aria-label={`Progress baca halaman ${Math.round(scrollProgress * 100)} persen`}
-          />
+          <div
+            className="sidebar-scroll-track"
+            role="progressbar"
+            aria-valuemin={0}
+            aria-valuemax={100}
+            aria-valuenow={progressPercent}
+            aria-label={`Progress baca halaman ${progressPercent} persen`}
+          >
+            <div className="sidebar-scroll-fill" style={{ width: `${progressPercent}%` }} />
+          </div>
 
           <nav className="sidebar-nav">
-            {navItems.map((item) => (
-              <Link
-                key={item.href}
-                className={cn("sidebar-link", isActivePath(pathname, item.href) && "is-active")}
-                href={item.href}
-                onClick={closeMenu}
-              >
-                <span className="sidebar-dot" aria-hidden="true" />
-                {item.label}
-              </Link>
-            ))}
+            {navItems.map((item, index) => {
+              const Icon = navIconMap[item.href];
+              const active = isActivePath(pathname, item.href);
+              return (
+                <Link
+                  key={item.href}
+                  className={cn("sidebar-link", active && "is-active")}
+                  href={item.href}
+                  aria-current={active ? "page" : undefined}
+                  style={{ "--nav-index": index } as CSSProperties}
+                  onClick={closeMenu}
+                >
+                  <Icon size={15} strokeWidth={active ? 2.4 : 1.9} aria-hidden="true" />
+                  <span>{item.label}</span>
+                </Link>
+              );
+            })}
           </nav>
 
           <div className="sidebar-spacer" />
 
-          <Link className="sidebar-interactive-mode" href="/" onClick={closeMenu}>
+          <Link
+            className="sidebar-interactive-mode"
+            href="/"
+            style={{ "--nav-index": 4 } as CSSProperties}
+            onClick={closeMenu}
+          >
             <Sparkles size={16} aria-hidden="true" />
             <span>
               Mode Akses Cepat
@@ -140,7 +186,13 @@ export default function Sidebar() {
             </span>
           </Link>
 
-          <a className="sidebar-whatsapp" href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+          <a
+            className="sidebar-whatsapp"
+            href={WHATSAPP_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            style={{ "--nav-index": 5 } as CSSProperties}
+          >
             <Image src="/whatsapp-icon.svg" alt="" width={18} height={18} aria-hidden="true" />
             <span>
               Chat WhatsApp
@@ -150,7 +202,7 @@ export default function Sidebar() {
 
           <div className="sidebar-status" aria-label="Info toko">
             <p>
-              <Clock3 size={13} aria-hidden="true" />
+              <span className="status-live-dot" aria-hidden="true" />
               Buka {STORE_HOURS}
             </p>
             <p>
@@ -162,12 +214,20 @@ export default function Sidebar() {
       </aside>
 
       <nav className="mobile-bottom-nav" aria-label="Navigasi cepat mobile">
-        {mobileNavItems.map(({ href, label, icon: Icon }) => (
-          <Link key={href} className={cn(isActivePath(pathname, href) && "is-active")} href={href}>
-            <Icon size={17} aria-hidden="true" />
-            <span>{label}</span>
-          </Link>
-        ))}
+        {mobileNavItems.map(({ href, label, icon: Icon }) => {
+          const active = isActivePath(pathname, href);
+          return (
+            <Link
+              key={href}
+              className={cn(active && "is-active")}
+              href={href}
+              aria-current={active ? "page" : undefined}
+            >
+              <Icon size={17} strokeWidth={active ? 2.4 : 1.85} aria-hidden="true" />
+              <span>{label}</span>
+            </Link>
+          );
+        })}
       </nav>
     </>
   );
