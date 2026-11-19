@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowRight, MapPin, Search, Wrench } from "lucide-react";
+import { ArrowRight, Search } from "lucide-react";
 import { STORE_HOURS } from "@/lib/constants";
 import BatteryBoxScrollAnimation from "./BatteryBoxScrollAnimation";
 import styles from "./HeroSection.module.css";
@@ -20,30 +20,16 @@ export default function HeroSection() {
               <span className="hero-title-line">Surabaya-Sidoarjo.</span>
             </h1>
             <p className="hero-lead">
-              Butuh aki baru, cek aki, setrum, tukar tambah, atau perlengkapan aki? Cari tipe aki sebagai panduan awal, lalu konfirmasi stok dan harga ke admin.
+              Beli aki baru, cek kondisi, setrum, tukar tambah, hingga perlengkapan aki. Cari tipe kendaraan Anda di katalog, lalu konfirmasi stok ke admin.
             </p>
 
             <div className="hero-actions" aria-label="Aksi utama">
               <Link className="btn btn-primary hero-cta-primary" href="/home/pesan-aki">
-                <Search size={14} aria-hidden="true" />
+                <Search size={15} aria-hidden="true" />
                 Cari Tipe &amp; Pesan Aki
-                <ArrowRight size={14} aria-hidden="true" />
+                <ArrowRight size={15} aria-hidden="true" />
               </Link>
-              <div className="hero-actions-secondary">
-                <Link className="btn btn-secondary" href="/home/lokasi" aria-label="Lihat Lokasi Toko">
-                  <MapPin size={13} aria-hidden="true" />
-                  Lokasi Toko
-                </Link>
-                <Link className="btn btn-secondary" href="/home/layanan">
-                  <Wrench size={13} aria-hidden="true" />
-                  Layanan Toko
-                </Link>
-              </div>
             </div>
-
-            <p className="hero-note">
-              Harga dan pilihan merek dikonfirmasi via WhatsApp agar sesuai stok terbaru dan kendaraan Anda.
-            </p>
           </div>
 
           <div className={styles.visualPanel} aria-hidden="true">

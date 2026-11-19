@@ -146,3 +146,14 @@ test("Final Review: interactive choice buttons have aria-pressed and text inputs
     assert.match(inputTag, /aria-label="/, `Input lacks aria-label: ${inputTag}`);
   }
 });
+
+test("Modern Dark Revision: InteractiveWizard uses overflow-x clip, balanced heading wrap, min-block-size controls, and readable typography", () => {
+  const css = fs.readFileSync(wizardCssPath, "utf8");
+
+  assert.match(css, /\.wz-page\s*\{[^}]*overflow-x:\s*clip;/s);
+  assert.match(css, /\.wz-greeting\s*\{[^}]*text-wrap:\s*balance;/s);
+  assert.match(css, /\.wz-input\s*\{[^}]*min-block-size:\s*2\.5rem;/s);
+  assert.doesNotMatch(css, /\.wz-input\s*\{[^}]*\bheight:/s);
+  assert.match(css, /\.wz-submit-btn\s*\{[^}]*min-block-size:\s*2\.75rem;/s);
+  assert.doesNotMatch(css, /\.wz-submit-btn\s*\{[^}]*\bheight:/s);
+});

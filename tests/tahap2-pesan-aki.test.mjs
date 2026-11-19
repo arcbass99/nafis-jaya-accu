@@ -241,7 +241,7 @@ test("Task 2: OrderSummary renders universal floating pill, controlled open draw
   );
 
   assert.match(emptyHtml, /class="floating-cart-btn"[^>]*aria-expanded="false"[^>]*aria-controls="order-summary-drawer"/);
-  assert.match(emptyHtml, /Ringkasan WA/);
+  assert.match(emptyHtml, /Keranjang/);
   assert.doesNotMatch(emptyHtml, /summary-clear-btn/);
   assert.doesNotMatch(emptyHtml, /mobile-floating-cart/);
 
@@ -259,7 +259,7 @@ test("Task 2: OrderSummary renders universal floating pill, controlled open draw
   );
 
   assert.match(openHtml, /class="floating-cart-btn has-items"[^>]*aria-expanded="true"/);
-  assert.match(openHtml, /2 Aki • Lanjut WA/);
+  assert.match(openHtml, /2 Aki • Lanjut/);
   assert.match(openHtml, /id="order-summary-drawer"[^>]*class="order-summary glass-panel is-open"/);
   assert.match(openHtml, /class="summary-clear-btn"[^>]*>Kosongkan</);
   assert.match(openHtml, /class="summary-close"/);
@@ -269,14 +269,17 @@ test("Task 2: OrderSummary renders universal floating pill, controlled open draw
   assert.match(source, /triggerRef\.current\?\.focus\(\)/);
 });
 
-test("Task 3: BatterySearch renders olshop showcase, sticky search bar, quick pills, multi-facet filters, and 36 visual cards", () => {
+test("Task 3: BatterySearch renders decluttered olshop catalog without WA button spam, underline tabs, filter toolbar, and 36 clean cards", () => {
   const { default: BatterySearch } = loadTsModule(batterySearchPath);
   const { QUICK_SEARCH_KEYWORDS } = loadTsModule(searchLibPath);
   const html = renderToStaticMarkup(React.createElement(BatterySearch));
 
   assert.doesNotMatch(html, /class="marketplace-strip/);
-  assert.match(html, /class="catalog-info-bar"/);
-  assert.match(html, /Bingung tipe\? Tanya Admin/);
+  assert.doesNotMatch(html, /class="catalog-info-bar"/);
+  assert.doesNotMatch(html, /class="search-quick-consult"/);
+  assert.doesNotMatch(html, /Bingung tipe\? Tanya Admin/);
+  assert.doesNotMatch(html, /Cek stok &amp; harga di WA/);
+
   assert.match(html, /class="catalog-sticky-search"/);
   assert.match(html, /class="quick-search-strip"/);
 
@@ -290,10 +293,9 @@ test("Task 3: BatterySearch renders olshop showcase, sticky search bar, quick pi
   assert.match(html, /Basah/);
   assert.match(html, /Terlaris/);
   assert.match(html, /aria-label="Urutkan katalog"/);
+  assert.match(html, /class="catalog-toolbar-row"/);
 
-  assert.equal((html.match(/class="battery-card"/g) ?? []).length, 36);
-  assert.equal((html.match(/class="battery-card-banner /g) ?? []).length, 36);
-  assert.match(html, /Cek stok &amp; harga di WA/);
+  assert.equal((html.match(/class="battery-card /g) ?? []).length, 36);
   assert.match(html, /class="floating-cart-btn"/);
 
   const source = fs.readFileSync(batterySearchPath, "utf8");
@@ -394,6 +396,7 @@ test("Final Review Fixes: numeric separator queries stay exact, drawer exposes d
 
   const css = fs.readFileSync(globalsCssPath, "utf8");
   assert.match(css, /\.battery-card\s*\{[^}]*min-width:\s*0;/s);
+  assert.match(css, /\.battery-card\s*\{[^}]*grid-template-rows:\s*subgrid;/s);
   assert.match(css, /\.battery-card-head\s*\{[^}]*flex-wrap:\s*wrap;/s);
   assert.match(css, /\.battery-card-head\s*>\s*div\s*\{[^}]*min-width:\s*0;[^}]*overflow-wrap:\s*anywhere;/s);
   assert.match(css, /@media\s*\(max-width:\s*1120px\)\s*\{[^}]*\.battery-grid\s*\{[^}]*grid-template-columns:\s*repeat\(3,\s*minmax\(0,\s*1fr\)\)/s);
@@ -401,4 +404,17 @@ test("Final Review Fixes: numeric separator queries stay exact, drawer exposes d
 
   const reducedMotionBlock = css.match(/@media\s*\(prefers-reduced-motion:\s*reduce\)\s*\{[\s\S]*\}\s*$/)?.[0] ?? "";
   assert.match(reducedMotionBlock, /\.order-summary\.is-open/);
+});
+
+test("Modern Dark Revision: flat underline tabs, subgrid cards without nested box clutter, dvh drawer with overscroll contain, and swipeable snap pills", () => {
+  const css = fs.readFileSync(globalsCssPath, "utf8");
+
+  assert.match(css, /\.catalog-sticky-search\s*\{[^}]*background:\s*#0d1420;/s);
+  assert.match(css, /\.quick-search-strip\s*\{[^}]*scroll-snap-type:\s*x\s+proximity;[^}]*mask-image:\s*linear-gradient/s);
+  assert.match(css, /\.vehicle-tab\.is-active::after/);
+  assert.match(css, /\.battery-fit\s*\{[^}]*line-clamp:\s*2;[^}]*overflow:\s*clip;/s);
+  assert.match(css, /\.order-summary\s*\{[^}]*overscroll-behavior:\s*contain;/s);
+  assert.match(css, /@media\s*\(max-width:\s*1024px\)[\s\S]*\.order-summary\s*\{[^}]*max-block-size:\s*85dvh;/);
+  assert.match(css, /@media\s*\(max-width:\s*768px\)[\s\S]*\.facet-chips\s*\{[^}]*flex-wrap:\s*nowrap;[^}]*scroll-snap-type:\s*x\s+proximity;/);
+  assert.match(css, /@media\s*\(max-width:\s*768px\)[\s\S]*\.floating-cart-btn:not\(\.has-items\)\s+\.floating-cart-label\s*\{[^}]*display:\s*none;/);
 });

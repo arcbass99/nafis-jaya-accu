@@ -126,14 +126,14 @@ const heroPath = path.join(rootDir, "src/components/HeroSection.tsx");
 const heroCssPath = path.join(rootDir, "src/components/HeroSection.module.css");
 const boxCssPath = path.join(rootDir, "src/components/BatteryBoxScrollAnimation.module.css");
 
-test("Task 2: HeroSection renders layered hero-card, live status pill, primary CTA, and secondary action pair", () => {
+test("Task 2: HeroSection renders layered hero-card, live status pill, and single focused primary CTA without duplicate secondary links", () => {
   const HeroSection = loadComponent(heroPath, "/home");
   const html = renderToStaticMarkup(React.createElement(HeroSection));
 
   assert.match(html, /class="hero-card"/);
   assert.match(html, /class="hero-status-pill"[\s\S]*status-live-dot[\s\S]*06\.00-21\.00/);
   assert.match(html, /href="\/home\/pesan-aki"/);
-  assert.match(html, /class="hero-actions-secondary"[\s\S]*href="\/home\/lokasi"[\s\S]*href="\/home\/layanan"/);
+  assert.doesNotMatch(html, /hero-actions-secondary/);
 });
 
 test("Task 2: Hero and 3D canvas CSS configure mobile visual-first order (-1) and scaled box dimensions without clipping", () => {
@@ -147,7 +147,6 @@ test("Task 2: Hero and 3D canvas CSS configure mobile visual-first order (-1) an
   assert.match(boxCss, /@media\s*\(max-width:\s*520px\)[\s\S]*width:\s*min\(100%,\s*10\.5rem\);/);
   assert.match(globalsCss, /\.hero-card\s*\{/);
   assert.doesNotMatch(globalsCss, /\.hero-card\s*\{[^}]*overflow:\s*hidden/s);
-  assert.match(globalsCss, /@media\s*\(max-width:\s*1024px\)[\s\S]*\.hero-actions-secondary\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/);
 });
 
 const highlightsPath = path.join(rootDir, "src/components/HomeHighlights.tsx");
@@ -216,12 +215,6 @@ test("Final Review Important #2: FAQSection removes inline transition and reduce
   assert.match(reducedMotionBlock, /\.sidebar-backdrop/);
 });
 
-test("Final Review Important #3: mobile .hero-actions-secondary buttons allow wrapping and compact padding on <= 355px", () => {
-  const globalsCss = fs.readFileSync(globalsCssPath, "utf8");
-  assert.match(globalsCss, /\.hero-actions-secondary\s+\.btn\s*\{[^}]*white-space:\s*normal;/s);
-  assert.match(globalsCss, /\.hero-actions-secondary\s+\.btn\s*\{[^}]*padding:\s*0\.45rem\s+0\.5rem;/s);
-});
-
 test("Final Review Important #4: closed mobile drawer hides visibility from tab order and restores focus to menu button on Escape/close", () => {
   const globalsCss = fs.readFileSync(globalsCssPath, "utf8");
   const sidebarSource = fs.readFileSync(sidebarPath, "utf8");
@@ -251,4 +244,25 @@ test("Polish Pass: Sidebar places brand-mark inside sidebar-brand horizontally, 
   assert.match(globalsCss, /\.faq-list\s*\{[^}]*grid-template-columns:\s*repeat\(2,\s*minmax\(0,\s*1fr\)\)/s);
   assert.match(globalsCss, /\.faq-item:last-child:nth-child\(odd\)\s*\{[^}]*grid-column:\s*1\s*\/\s*-1;/s);
   assert.match(globalsCss, /@media\s*\(max-width:\s*768px\)[\s\S]*\.faq-list\s*\{[^}]*grid-template-columns:\s*1fr;/);
+});
+
+test("Modern Dark Revision: readable 14px base typography, dark-mode scrollbars, focus-visible ring, calm footer, and overscroll containment", () => {
+  const Footer = loadComponent(footerPath, "/home");
+  const footerHtml = renderToStaticMarkup(React.createElement(Footer));
+  const globalsCss = fs.readFileSync(globalsCssPath, "utf8");
+
+  assert.match(footerHtml, /class="footer-brand-head"/);
+  assert.match(footerHtml, /class="footer-quick-actions"/);
+  assert.match(footerHtml, /class="footer-meta-bar"/);
+  assert.doesNotMatch(footerHtml, /class="is-wa"/);
+
+  assert.match(globalsCss, /html\s*\{[^}]*color-scheme:\s*dark;[^}]*accent-color:\s*var\(--brand\);[^}]*scrollbar-color:/s);
+  assert.match(globalsCss, /@supports not \(scrollbar-color:\s*auto\)/);
+  assert.match(globalsCss, /body\s*\{[^}]*font-size:\s*0\.875rem;/s);
+  assert.match(globalsCss, /:focus-visible\s*\{[^}]*outline:\s*2px solid var\(--brand\)/s);
+  assert.match(globalsCss, /\.site-sidebar\s*\{[^}]*overscroll-behavior:\s*contain;/s);
+  assert.match(globalsCss, /\.mobile-topbar\s*\{[^}]*background:\s*#080c14;/s);
+  assert.match(globalsCss, /\.mobile-bottom-nav\s*\{[^}]*background:\s*#080c14;/s);
+  assert.doesNotMatch(globalsCss, /\.footer-quick-actions\s+a\.is-wa/);
+  assert.match(globalsCss, /@media\s*\(max-width:\s*1024px\)[\s\S]*\.app-main\s*\{[^}]*padding-bottom:\s*5\.5rem;/);
 });

@@ -6,7 +6,6 @@ import {
   Bike,
   Car,
   Check,
-  MessageCircle,
   Search,
   Sparkles,
   X,
@@ -34,11 +33,11 @@ interface StoredOrderDraft {
   context: OrderContext;
 }
 
-const VEHICLE_TABS: readonly { id: BatteryVehicleFilter; label: string }[] = [
+const VEHICLE_TABS: readonly { id: BatteryVehicleFilter; label: string; desktopSuffix?: string }[] = [
   { id: "all", label: "Semua" },
   { id: "car", label: "Mobil" },
   { id: "motorcycle", label: "Motor" },
-  { id: "vrla", label: "VRLA / UPS" },
+  { id: "vrla", label: "VRLA", desktopSuffix: " / UPS" },
 ];
 
 const TECH_CHIPS: readonly { id: BatteryTechFilter; label: string }[] = [
@@ -58,7 +57,7 @@ const SORT_OPTIONS: readonly { id: BatterySortOption; label: string }[] = [
 const VEHICLE_META = {
   car: { label: "Mobil", bannerClass: "is-car", icon: Car },
   motorcycle: { label: "Motor", bannerClass: "is-motorcycle", icon: Bike },
-  vrla: { label: "VRLA / UPS", bannerClass: "is-vrla", icon: BatteryCharging },
+  vrla: { label: "VRLA", bannerClass: "is-vrla", icon: BatteryCharging },
 } as const;
 
 const TECH_BADGE_MAP = {
@@ -178,26 +177,9 @@ export default function BatterySearch() {
 
   return (
     <section id="cari-aki" className="section search-section" aria-labelledby="search-title">
-      <div className="section-heading phi-heading">
-        <div>
-          <p className="section-kicker">
-            <Search size={16} aria-hidden="true" />
-            Etalase &amp; cari berdasarkan kendaraan
-          </p>
-          <h2 id="search-title">Katalog Aki Kendaraan</h2>
-        </div>
-      </div>
-
-      <div className="catalog-info-bar">
-        <span>{batteries.length} Tipe Aki • Stok &amp; Harga via WA • Cocokkan Ukuran</span>
-        <button
-          type="button"
-          className="catalog-consult-btn"
-          onClick={() => openConsultDrawer()}
-        >
-          <MessageCircle size={13} aria-hidden="true" />
-          Bingung tipe? Tanya Admin
-        </button>
+      <div className="catalog-head">
+        <h2 id="search-title">Katalog Aki</h2>
+        <span className="catalog-head-count">{batteries.length} tipe</span>
       </div>
 
       <div className="catalog-sticky-search">
@@ -212,7 +194,7 @@ export default function BatterySearch() {
             type="search"
             value={query}
             onChange={(event) => setQuery(event.target.value)}
-            placeholder="Cari Avanza, Innova, Brio, NMAX, Vario, NS40..."
+            placeholder="Cari mobil, motor, atau kode (Avanza, NMAX, NS40)..."
             autoComplete="off"
           />
           {query ? (
@@ -229,16 +211,6 @@ export default function BatterySearch() {
             </button>
           ) : null}
         </div>
-
-        <button
-          type="button"
-          className="search-quick-consult"
-          onClick={() => openConsultDrawer(trimmedQuery)}
-          aria-label="Konsultasi langsung via WhatsApp"
-        >
-          <MessageCircle size={14} aria-hidden="true" />
-          <span>Tanya</span>
-        </button>
       </div>
 
       <div className="quick-search-strip" aria-label="Pencarian cepat kendaraan populer">
@@ -258,82 +230,85 @@ export default function BatterySearch() {
         })}
       </div>
 
-      <div className="catalog-filter-panel glass-panel">
-        <div className="vehicle-tabs" role="tablist" aria-label="Segmen kendaraan">
-          {VEHICLE_TABS.map((tab) => {
-            const active = vehicleFilter === tab.id;
+      <div className="vehicle-tabs" role="tablist" aria-label="Segmen kendaraan">
+        {VEHICLE_TABS.map((tab) => {
+          const active = vehicleFilter === tab.id;
+          return (
+            <button
+              key={tab.id}
+              type="button"
+              role="tab"
+              aria-selected={active}
+              className={cn("vehicle-tab", active && "is-active")}
+              onClick={() => handleVehicleChange(tab.id)}
+            >
+              {tab.label}
+              {tab.desktopSuffix ? <span className="hide-mobile">{tab.desktopSuffix}</span> : null}
+            </button>
+          );
+        })}
+      </div>
+
+      <div className="facet-bar">
+        <div className="facet-chips" aria-label="Filter tipe aki">
+          {TECH_CHIPS.map((chip) => {
+            const disabledForVrla = vehicleFilter === "vrla" && chip.id !== "all";
+            const active = techFilter === chip.id;
             return (
               <button
-                key={tab.id}
+                key={chip.id}
                 type="button"
-                role="tab"
-                aria-selected={active}
-                className={cn("vehicle-tab", active && "is-active")}
-                onClick={() => handleVehicleChange(tab.id)}
+                disabled={disabledForVrla}
+                aria-pressed={active}
+                className={cn("filter-chip", active && "is-active")}
+                onClick={() => setTechFilter(chip.id)}
               >
-                {tab.label}
+                {chip.label}
               </button>
             );
           })}
-        </div>
-
-        <div className="facet-bar">
-          <div className="facet-chips" aria-label="Filter tipe aki">
-            {TECH_CHIPS.map((chip) => {
-              const disabledForVrla = vehicleFilter === "vrla" && chip.id !== "all";
-              const active = techFilter === chip.id;
-              return (
-                <button
-                  key={chip.id}
-                  type="button"
-                  disabled={disabledForVrla}
-                  aria-pressed={active}
-                  className={cn("filter-chip", active && "is-active")}
-                  onClick={() => setTechFilter(chip.id)}
-                >
-                  {chip.label}
-                </button>
-              );
-            })}
-            <button
-              type="button"
-              aria-pressed={onlyPopular}
-              className={cn("filter-chip is-popular-chip", onlyPopular && "is-active")}
-              onClick={() => setOnlyPopular((prev) => !prev)}
-            >
-              <Sparkles size={11} aria-hidden="true" />
-              Terlaris
-            </button>
-          </div>
-
-          <div className="facet-actions">
-            <select
-              className="catalog-sort-select"
-              aria-label="Urutkan katalog"
-              value={sortBy}
-              onChange={(event) => setSortBy(event.target.value as BatterySortOption)}
-            >
-              {SORT_OPTIONS.map((opt) => (
-                <option key={opt.id} value={opt.id}>
-                  {opt.label}
-                </option>
-              ))}
-            </select>
-
-            {hasCatalogRefinement ? (
-              <button className="catalog-reset" type="button" onClick={resetCatalog}>
-                <X size={13} aria-hidden="true" />
-                Reset
-              </button>
-            ) : null}
-          </div>
+          <button
+            type="button"
+            aria-pressed={onlyPopular}
+            className={cn("filter-chip is-popular-chip", onlyPopular && "is-active")}
+            onClick={() => setOnlyPopular((prev) => !prev)}
+          >
+            <Sparkles size={12} aria-hidden="true" />
+            Terlaris
+          </button>
         </div>
       </div>
 
-      <div className="catalog-meta">
-        <span>{filteredItems.length} tipe tampil</span>
-        <span>{popularItems} populer</span>
-        <span>{selectedItems.length} di keranjang</span>
+      <div className="catalog-toolbar-row">
+        <div className="catalog-meta">
+          <span>{filteredItems.length} produk</span>
+          <span className="hide-mobile">• {popularItems} populer</span>
+          {selectedItems.length > 0 ? (
+            <span className="meta-cart-count">• {selectedItems.length} dipilih</span>
+          ) : null}
+        </div>
+
+        <div className="facet-actions">
+          <select
+            className="catalog-sort-select"
+            aria-label="Urutkan katalog"
+            value={sortBy}
+            onChange={(event) => setSortBy(event.target.value as BatterySortOption)}
+          >
+            {SORT_OPTIONS.map((opt) => (
+              <option key={opt.id} value={opt.id}>
+                {opt.label}
+              </option>
+            ))}
+          </select>
+
+          {hasCatalogRefinement ? (
+            <button className="catalog-reset" type="button" onClick={resetCatalog}>
+              <X size={13} aria-hidden="true" />
+              Reset
+            </button>
+          ) : null}
+        </div>
       </div>
 
       {filteredItems.length === 0 ? (
@@ -384,10 +359,10 @@ export default function BatterySearch() {
             const techClass = TECH_BADGE_MAP[item.technology];
 
             return (
-              <article className={cn("battery-card", isSelected && "is-selected")} key={item.id}>
-                <div className={cn("battery-card-banner", meta.bannerClass)}>
+              <article className={cn("battery-card", meta.bannerClass, isSelected && "is-selected")} key={item.id}>
+                <div className="battery-card-top">
                   <span className="battery-segment-label">
-                    <VehicleIcon size={13} aria-hidden="true" />
+                    <VehicleIcon size={12} aria-hidden="true" />
                     {meta.label}
                   </span>
                   {item.isPopular ? (
@@ -407,11 +382,10 @@ export default function BatterySearch() {
                 </div>
 
                 <p className="battery-fit">
-                  <strong>Untuk:</strong> {item.commonVehicles.join(", ")}
+                  {item.commonVehicles.join(", ")}
                 </p>
 
                 <div className="battery-card-footer">
-                  <span className="battery-price-hint">Cek stok &amp; harga di WA</span>
                   <button
                     className="battery-select"
                     type="button"
@@ -420,7 +394,7 @@ export default function BatterySearch() {
                   >
                     {isSelected ? (
                       <>
-                        <Check size={12} aria-hidden="true" /> Dipilih
+                        <Check size={13} aria-hidden="true" /> Dipilih
                       </>
                     ) : (
                       "+ Pilih"

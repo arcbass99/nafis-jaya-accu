@@ -14,27 +14,34 @@ export default function Footer() {
     <footer className="site-footer">
       <div className="footer-grid phi-grid">
         <div className="footer-brand">
-          <div className="footer-icon" aria-hidden="true">
-            <BatteryCharging size={20} />
+          <div className="footer-brand-head">
+            <div className="footer-icon" aria-hidden="true">
+              <BatteryCharging size={18} />
+            </div>
+            <h2>{BUSINESS_NAME}</h2>
           </div>
-          <h2>{BUSINESS_NAME}</h2>
           <p>
             Aki mobil, aki motor, setrum aki, tukar tambah, dan perlengkapan aki untuk area {SERVICE_AREA}.
           </p>
         </div>
 
         <div className="footer-links">
-          <div>
+          <div className="footer-links-col">
             <h3>Kontak Cepat</h3>
-            <Link href="/">Mode Akses Cepat</Link>
-            <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
-              WhatsApp Admin
-            </a>
-            <a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer">
-              Buka Google Maps
-            </a>
-            <span>Buka {STORE_HOURS}</span>
-            <span>Harga & stok via WhatsApp</span>
+            <div className="footer-quick-actions">
+              <Link href="/">Mode Akses Cepat</Link>
+              <a href={WHATSAPP_URL} target="_blank" rel="noopener noreferrer">
+                WhatsApp Admin
+              </a>
+              <a href={GOOGLE_MAPS_URL} target="_blank" rel="noopener noreferrer">
+                Buka Google Maps
+              </a>
+            </div>
+            <div className="footer-meta-bar">
+              <span>Buka {STORE_HOURS}</span>
+              <span>•</span>
+              <span>Harga &amp; stok via WhatsApp</span>
+            </div>
           </div>
         </div>
       </div>

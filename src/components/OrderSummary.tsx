@@ -121,7 +121,7 @@ export default function OrderSummary({
           )}
         </div>
         <span className="floating-cart-label">
-          {selectedItems.length > 0 ? `${selectedItems.length} Aki • Lanjut WA` : "Ringkasan WA"}
+          {selectedItems.length > 0 ? `${selectedItems.length} Aki • Lanjut` : "Keranjang"}
         </span>
       </button>
 
